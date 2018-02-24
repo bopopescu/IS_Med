@@ -1,16 +1,17 @@
-INSERT INTO pedido
+INSERT INTO Utente
 VALUES 
-(1,'2017-01-22 14:20:55',1,51,'Braga',255225220,0),
-(2,'2017-01-22 17:26:15',2,52,'Braga',255225222,0),
-(3,'2017-01-21 09:20:55',3,53,'Guimaraes',255225223,0),
-(4,'2017-01-21 14:20:55',4,54,'Braga',255225224,0),
-(5,'2017-01-23 20:20:55',5,55,'Guimaraes',255225225,0),
-(6,'2017-01-23 11:32:55',6,56,'Braga',255225226,0),
-(7,'2017-01-22 18:45:55',1,51,'Vila Verde',255225220,0),
-(8,'2017-01-21 12:20:55',2,52,'Vila Verde',255225222,0),
-(9,'2017-01-22 13:20:55',6,56,'Braga',255225226,0),
-(10,'2017-01-22 17:20:55',7,57,'Bragança',255225227,0);
+(151516,'Braga','M',918787871,'José Maria Sonic'),
+(223456,'Braga','M',923456781,'Carlos Cruz'),
+(334567,'Guimaraes','F',934568712,'Maria Oliveira'),
+(412345,'Braga','F',965412378,'Joana Bacalhau'),
+(525361,'Guimaraes','F',963258741,'Andreia Josefa'),
+(612344,'Braga','M',917346825,'Marcos Costa'),
+(723134,'Vila Verde','F',928564713,'Ana Filipa'),
+(821354,'Vila Verde','M',914564563,'Mario Andrade'),
+(943567,'Braga','F',937193715,'Luisa Martins'),
+(105678,'Bragança','M',969594987,'Rui Carvalho');
 
-#INSERT INTO pedido
-#VALUES 
-#(11,'2017-01-22 14:20:55',1,51,'Braga',255225220,0);
+# só para testar o trigger
+INSERT INTO Pedido
+VALUES 
+(1,'201701221420','VAL','Raio X Pé Esquerdo',151516);

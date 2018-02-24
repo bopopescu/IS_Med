@@ -1,5 +1,4 @@
 -- MySQL Workbench Forward Engineering
--- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -16,30 +15,47 @@ CREATE SCHEMA IF NOT EXISTS `pedido` DEFAULT CHARACTER SET utf8 ;
 USE `pedido` ;
 
 -- -----------------------------------------------------
--- Table `pedido`.`Pedido`
+-- Table `pedido`.`Utente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pedido`.`Pedido` (
-  `idPedido` INT NOT NULL,
-  `data` DATETIME(0) NOT NULL,
-  `idDoente` INT NOT NULL,
-  `nprocesso` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `pedido`.`Utente` (
+  `idUtenteCC` INT NOT NULL,
   `morada` VARCHAR(45) NOT NULL,
+  `sexo` VARCHAR(1) NOT NULL,
   `telefone` INT NOT NULL,
-  `estado` INT NOT NULL,
-  PRIMARY KEY (`idPedido`))
+  `nome` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idUtenteCC`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `pedido`.`worklist`
+-- Table `pedido`.`Pedido`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pedido`.`worklist` (
-  `idworklist` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `pedido`.`Pedido` (
   `idPedido` INT NOT NULL,
-  `estado` INT NULL,
-  PRIMARY KEY (`idworklist`),
-  INDEX `fk_worklist_Pedido_idx` (`idPedido` ASC),
-  CONSTRAINT `fk_worklist_Pedido`
+  `data` VARCHAR(45) NOT NULL,
+  `estado` VARCHAR(5) NOT NULL,
+  `descricao` VARCHAR(120) NOT NULL,
+  `idUtenteCC` INT NOT NULL,
+  PRIMARY KEY (`idPedido`),
+  INDEX `fk_Pedido_Utente_idx` (`idUtenteCC` ASC),
+  CONSTRAINT `fk_Pedido_Utente`
+    FOREIGN KEY (`idUtenteCC`)
+    REFERENCES `pedido`.`Utente` (`idUtenteCC`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pedido`.`Worklist`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `pedido`.`Worklist` (
+  `idWorklist` INT NOT NULL AUTO_INCREMENT,
+  `estado` VARCHAR(5) NOT NULL,
+  `idPedido` INT NOT NULL,
+  PRIMARY KEY (`idWorklist`),
+  INDEX `fk_Worklist_Pedido1_idx` (`idPedido` ASC),
+  CONSTRAINT `fk_Worklist_Pedido1`
     FOREIGN KEY (`idPedido`)
     REFERENCES `pedido`.`Pedido` (`idPedido`)
     ON DELETE NO ACTION
