@@ -15,3 +15,4 @@ VALUES
 INSERT INTO Pedido
 VALUES 
 (1,'2',151516,'Rua',1, 'CA', 'Raio X Pé Esquerdo');
+
