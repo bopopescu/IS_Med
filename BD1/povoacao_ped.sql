@@ -14,5 +14,5 @@ VALUES
 # só para testar o trigger
 INSERT INTO Pedido
 VALUES 
-(1,'2',151516,'Rua',1, 'CA', 'Raio X Pé Esquerdo');
+(1,2,151516, 'CA', 'Raio X Pé Esquerdo');
 
