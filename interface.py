@@ -1,36 +1,29 @@
 import mysql.connector
 
-print("Criar pedido")
+print("Criar pedido\n")
 
 conn = mysql.connector.connect(
-    user ='root',
+    user='root',
     password='root',
     host='127.0.0.1',
     database='pedido')
-
-mycursor = conn.cursor()
 
 data = raw_input("Insira a data: ")
 estado = raw_input("Insira o estado pretendido para o pedido (CA,NW): ")
 cc = raw_input("Insira o CC do utente: ")
 descr = raw_input("Insira a descricao: ")
 
-
-mycursor.execute("SELECT MAX(idPedido) from pedido.Pedido")
-id_pedido = mycursor.fetchone()
-print(id_pedido[0])
-id_pedido = id_pedido[0] + 1
-
+mycursor = conn.cursor()
 
 try:
-    sql = "INSERT INTO pedido.Pedido VALUES (%d, %d, %d, %s, %s)"
-    data = (int(id_pedido), int(data), int(cc), str(estado), str(descr))
-    mycursor.execute(sql,data)
+    sql = "INSERT INTO pedido.Pedido(data, idDoente, estado, descricao) VALUES (%(data)s, %(idDoente)s, %(estado)s, %(descricao)s) "
+    mycursor.execute(sql, {'data': data, 'idDoente': cc, 'estado': str(estado), 'descricao': str(descr), })
     conn.commit()
+
 except:
     conn.rollback()
 
+mycursor.close()
 conn.close()
 
 exit()
-

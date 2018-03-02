@@ -22,7 +22,7 @@ nome = cursor.fetchone()
 cursor.execute("SELECT estado FROM Pedido WHERE idPedido = " + str(idP[0]))
 estado = cursor.fetchone()
 
-cursor.execute("SELECT Pedido.desc FROM Pedido WHERE idPedido = %s", (idP[0],))
+cursor.execute("SELECT descricao FROM Pedido WHERE idPedido = %s", (idP[0],))
 desc = cursor.fetchone()
 
 cursor.execute("SELECT sexo FROM Utente WHERE idUtenteCC = " + str(idD[0]))
