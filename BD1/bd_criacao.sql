@@ -21,13 +21,14 @@ USE `pedido` ;
 -- Table `pedido`.`Pedido`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pedido`.`Pedido` (
-  `idPedido` INT(11) NOT NULL,
+  `idPedido` INT(11) NOT NULL AUTO_INCREMENT,
   `data` INT(1) NOT NULL,
   `idDoente` INT(11) NOT NULL,
-  `estado` VARCHAR(2) NOT NULL,
-  `desc` VARCHAR(45) NOT NULL,
+  `tipo` VARCHAR(2) NOT NULL,
+  `descricao` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idPedido`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 19
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -51,17 +52,15 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pedido`.`worklist` (
   `idworklist` INT(11) NOT NULL AUTO_INCREMENT,
-  `idPedido` INT(11) NOT NULL,
   `estado` VARCHAR(2) NULL DEFAULT NULL,
+  `idPedido` INT(11) NOT NULL,
   PRIMARY KEY (`idworklist`),
-  INDEX `fk_worklist_Pedido_idx` (`idPedido` ASC),
-  CONSTRAINT `fk_worklist_Pedido`
+  INDEX `idPedido` (`idPedido` ASC),
+  CONSTRAINT `worklist_ibfk_1`
     FOREIGN KEY (`idPedido`)
-    REFERENCES `pedido`.`Pedido` (`idPedido`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `pedido`.`Pedido` (`idPedido`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 12
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -78,10 +77,9 @@ TRIGGER `pedido`.`trigg_up`
 AFTER INSERT ON `pedido`.`Pedido`
 FOR EACH ROW
 BEGIN
-	INSERT INTO Worklist(idPedido,estado) 
-    VALUES (NEW.idPedido,new.estado);
+	INSERT INTO worklist(estado, idPedido) 
+    VALUES (0, NEW.idPedido);
 END$$
 
 
 DELIMITER ;
-
