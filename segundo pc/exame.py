@@ -1,7 +1,7 @@
 from datetime import datetime
 
 #i = datetime.now().strftime('%Y%m%d%H%M%S')
-
+n = 0
 path = '/Users/adriana/Documents/uni/EC/is/IS_Med/Output1.txt'
 
 file = open(path, 'r')
@@ -48,12 +48,14 @@ print (msg)
 #cursor.execute("SELECT dataNasc FROM Utente WHERE idUtenteCC = " + str(idD[0]))
 #dataNasc = cursor.fetchone()
 
+obx = "OBX|1|TX|||" + str(obs[0]) + "|||||" + str(sexo[0]) + "|||" + str(i) + "|||||""\r"
+
 msh = "MSH|^~\&|B|B|A|A|" + str(data[0]) + "||ORU^R01|" + str(idP[0]) + "|P|2.5\r"
 
 
-msg = msh + arr[2] + arr[4] + arr[5]
-#text_file = open("Output.txt", "w")
-#text_file.write(aux)
-#text_file.close()
-
+msg = msh + arr[2] + arr[4] + arr[5] + obx
+text_file = open("Output_PC2" + str(n) + ".txt", "w")
+text_file.write(aux)
+text_file.close()
+n += 1
 
