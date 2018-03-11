@@ -1,28 +1,50 @@
 import socket
-import sys
-from pip._vendor.distlib.compat import raw_input
+import threading
 
+import time
 
+global queueToSend
+queueToSend= []
 
-def client():
-    # Create a TCP/IP socket
+def letsSendSomeMessages():
+    time.sleep(10)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # Connect the socket to the port where the server is listening
-    server_address = ('172.20.10.3', 10000)
+    server_address = ('localhost', 10000)
     print('connecting to %s port %s' % server_address)
     sock.connect(server_address)
 
     while True:
-        try:
-            message = raw_input("Message: ")
-            # Send data
+        if queueToSend:
+            message = queueToSend[0]
             sendData(sock,message)
-            # Look for the response
             receiveData(sock)
+            del queueToSend[0]
 
-        finally:
-            print('closing socket')
-            sock.close()
+
+
+
+
+global queueReceived
+queueReceived= []
+
+def letsReceiveSomeMessages():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_address = ('localhost', 10001)
+    print('starting up on %s port %s' % server_address)
+    sock.bind(server_address)
+    sock.listen(1)
+    print('waiting for a connection')
+    connection, client_address = sock.accept()
+    print('connection from', client_address)
+    while True:
+        data = receiveData(connection).decode()
+        queueReceived.append(data)
+        sendData(connection,"Confirmed Reception")
+
+
+
+
+
 
 def sendData(sock,message):
     print('sending "%s"' % message)
@@ -30,12 +52,23 @@ def sendData(sock,message):
 
 
 def receiveData(sock):
-    while True:
-        data = sock.recv(512)
-        print('received "%s"' % data)
-        if not(data):
-            print("Finished!")
-            break
+    data = sock.recv(10000)
+    print('received "%s"' % data)
+    return data
 
 
-client()
+
+
+queueToSend.append("Teste")
+queueToSend.append("Teste")
+queueToSend.append("Teste")
+queueToSend.append("Teste")
+queueToSend.append("Teste")
+queueToSend.append("Teste")
+queueToSend.append("Teste")
+
+
+a_thread = threading.Thread(target=letsSendSomeMessages)
+a_thread.start()
+b_thread = threading.Thread(target=letsReceiveSomeMessages)
+b_thread.start()

@@ -1,30 +1,49 @@
 import socket
-import sys
+import threading
 
+import time
 
-def createServer():
-    # Create a TCP/IP socket
+global queueReceived
+queueReceived= []
+
+def letsReceiveSomeMessages():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    # Bind the socket to the port
-    server_address = ('172.20.10.3', 10000)
+    server_address = ('localhost', 10000)
     print('starting up on %s port %s' % server_address)
     sock.bind(server_address)
-    # Listen for incoming connections
     sock.listen(1)
+    print('waiting for a connection')
+    connection, client_address = sock.accept()
+    print('connection from', client_address)
+    while True:
+        data = receiveData(connection).decode()
+        queueReceived.append(data)
+        sendData(connection,"Confirmed Reception")
+
+
+
+
+global queueToSend
+queueToSend= []
+
+def letsSendSomeMessages():
+    time.sleep(10)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_address = ('localhost', 10001)
+    print('connecting to %s port %s' % server_address)
+    sock.connect(server_address)
 
     while True:
-        # Wait for a connection
-        print('waiting for a connection')
-        connection, client_address = sock.accept()
-        try:
-            print('connection from', client_address)
-            # Receive the data in small chunks and retransmit it
-            data = receiveData(connection)
-            print(data)
-        finally:
-            # Clean up the connection
-            connection.close()
+        if queueToSend:
+            message = queueToSend[0]
+            sendData(sock,message)
+            receiveData(sock)
+            del queueToSend[0]
+
+
+
+
+
 
 
 def sendData(sock,message):
@@ -33,13 +52,25 @@ def sendData(sock,message):
 
 
 def receiveData(sock):
-    data = ""
-    while True:
-        data += sock.recv(512)
-        print('received "%s"' % data)
-        if not(data):
-            print("Finished!")
-            return data
+    data = sock.recv(10000)
+    print("received %s" %data )
+    return data
 
 
-createServer()
+
+
+
+queueToSend.append("Teste")
+queueToSend.append("Teste")
+queueToSend.append("Teste")
+queueToSend.append("Teste")
+queueToSend.append("Teste")
+queueToSend.append("Teste")
+queueToSend.append("Teste")
+
+
+
+a_thread = threading.Thread(target=letsSendSomeMessages)
+a_thread.start()
+b_thread = threading.Thread(target=letsReceiveSomeMessages)
+b_thread.start()
