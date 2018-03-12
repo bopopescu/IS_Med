@@ -6,90 +6,71 @@ data = datetime.now().strftime('%Y%m%d%H%M%S')
 
 n = 0
 
-''' NAO VAI RECEBER UM FICHEIRO MAS SIM UMA STRING 
-path = '/Users/adriana/Documents/uni/EC/is/IS_Med/Output1.txt'
 
-file = open(path, 'r')
+def criarMensagem(msg):
 
-i = 0
-arr = []
+    msg_recebida = msg
 
-for line in file:
-    arr.append(line)
-    i += 1
+    split_msg = msg_recebida.split('\n',4)
+    #|AA|AA|BB|BB|
+    msh_recebido = split_msg[0].split('||',1)[0][8:-12]
+    #AA
+    msh_from = msh_recebido.split('|',4)[1]
+    #BB
+    msh_to = msh_recebido.split('|',4)[3]
 
-msg = arr[2] + arr[4] + arr[5]
+    msh = split_msg[0][:9] + msh_to + "|" + msh_to + "|" + msh_from + "|" + msh_from + split_msg[0][20:len(split_msg[0])]
 
-print (msg)
+    pid =split_msg[1]
+    if (pid.split('||||||||||',1)[0][-1]=='F'):
+        sexo='F'
+    else:
+        sexo='M'
 
-'''
+    orc =split_msg[3]
+    obr =split_msg[4]
 
-#parse da string
-msg_recebida = "MSH|^~\&|AA|AA|BB|BB|201504051157||ORM^O01|A2015040511	5751000002533|P|2.5|||AL|"+\
-               "\nPID|||50626||CONCEICAO SERRANO SEQUEIRA^MARIA^^||19411012|F||||||||||28006303|"+\
-               "\nPV1||I|INT||||||||||||||||15002727|"+\
-               "\nORC|CA|4727374|4727374||||||20150405111053|"+\
-               "\nOBR|01|4727374|4727374|M10405^TORAX, UMA INCIDENCIA|||||||||||^^^|||CR|RXE||||||||^^^20150405115723^^0||||||"+"\n"
-
-split_msg = msg_recebida.split('\n',4)
-
-#|AA|AA|BB|BB|
-msh_recebido = split_msg[0].split('||',1)[0][8:-12]
-
-#AA
-msh_from = msh_recebido.split('|',4)[1]
-
-#BB
-msh_to = msh_recebido.split('|',4)[3]
-
-msh = split_msg[0][:9] + msh_to + "|" + msh_to + "|" + msh_from + "|" + msh_from + split_msg[0][20:len(split_msg[0])]
+    id_pedido = pid.split('|', 4)[3]
 
 
+    #recolher input da observacao e inserir na worklist do pc2
+    while(1):
+        print("\n\n\nMensagem lida\n")
 
-pid =split_msg[1]
-if (pid.split('||||||||||',1)[0][-1]=='F'):
-    sexo='F'
-else:
-    sexo='M'
+        conn = mysql.connector.connect(
+            user='root',
+            password='',
+            host='127.0.0.1',
+            database='worklist')
 
-orc =split_msg[3]
-obr =split_msg[4]
+        obs = raw_input("Insira as observacoes do exame: ")
 
+        obx = "OBX|1|TX|||" + str(obs[0]) + "|||||" + str(sexo[0]) + "|||" + str(data) + "|||||""\n"
+        msg = msh + "\n" + pid + "\n" + orc + "\n" + obr + "\n" + obx + "\n"
 
-#recolher input da observacao e inserir na worklist do pc2
-while(1):
-    print("\n\n\nMensagem lida\n")
+        cursor = conn.cursor()
 
-    conn = mysql.connector.connect(
-        user='root',
-        password='root',
-        host='127.0.0.1',
-        #!
-        database='worklist')
+        #alterar para os parâmetros da bd do pc2
+        try:
+            sql = "INSERT INTO worklist(id_pedido, msg, estado) VALUES (%(data)s, %(msg)s, %(estado)s) "
+            cursor.execute(sql, {'id_pedido': id_pedido, 'msg': msg, 'estado': 0 })
+            conn.commit()
 
-    obs = raw_input("Insira as observacoes do exame: ")
+        except:
+            conn.rollback()
 
-    obx = "OBX|1|TX|||" + str(obs[0]) + "|||||" + str(sexo[0]) + "|||" + str(data) + "|||||""\n"
-    msg = msh + "\n" + pid + "\n" + orc + "\n" + obr + "\n" + obx + "\n"
+        cursor.close()
+        conn.close()
+        text_file = open("Output_PC2" + str(n) + ".txt", "w")
+        text_file.write(msg)
+        text_file.close()
+        n += 1
 
-    cursor = conn.cursor()
+criarMensagem("MSH|^~\&|PACS|PACS|AIDA|AIDA|201504091057||ORM^O01|A2015040910	5716000006775|P|2.5|||AL|\n"
+              +"PID|||102863||ABREU	SILVA^ISABEL^^||19460226|F|||||||||||\n"
+              +"PV1||O|RAD||||||||||||||||15011620|\n"
+              +"ORC|SC|4711080|4711080||CM||||20150409|\n"
+              +"OBR|01|4711080|4711080|M10825^COXA,	DUAS	INCIDENCIAS|||||||||||^^^||||||||||0||^^^20150409105716^^N||||||")
 
-    #alterar para os parâmetros da bd do pc2
-    try:
-        sql = "INSERT INTO worklist(data, idDoente, tipo, descricao) VALUES (%(data)s, %(idDoente)s, %(tipo)s, %(descricao)s) "
-        cursor.execute(sql, {'data': data, 'idDoente': cc, 'tipo': tipo, 'descricao': descr, })
-        conn.commit()
-
-    except:
-        conn.rollback()
-
-    cursor.close()
-    conn.close()
-
-
-    text_file = open("Output_PC2" + str(n) + ".txt", "w")
-    text_file.write(msg)
-    text_file.close()
-    n += 1
 
 exit()

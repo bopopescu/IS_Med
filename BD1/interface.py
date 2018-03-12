@@ -2,6 +2,8 @@ import mysql.connector
 
 n = 0
 
+
+
 while(1):
 
     print("\n\n\nCriar pedido\n")

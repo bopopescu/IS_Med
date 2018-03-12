@@ -1,7 +1,8 @@
 import socket
 import threading
-
+from exame import criarMensagem
 import time
+
 
 global queueReceived
 queueReceived= []
@@ -18,9 +19,7 @@ def letsReceiveSomeMessages():
     while True:
         data = receiveData(connection).decode()
         queueReceived.append(data)
-        sendData(connection,"Confirmed Reception")
-
-
+        sendData(connection, "Confirmed Reception")
 
 
 global queueToSend
@@ -35,14 +34,14 @@ def letsSendSomeMessages():
 
     while True:
         if queueToSend:
-            message = queueToSend[0]
-            sendData(sock,message)
+            #message = queueToSend[0]
+            #sendData(sock, message)
+
+            queueToSend.append(criarMensagem(queueReceived[0]))
+            sendData(sock, queueToSend[0])
             receiveData(sock)
+            del queueReceived[0]
             del queueToSend[0]
-
-
-
-
 
 
 
