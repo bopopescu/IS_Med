@@ -34,13 +34,8 @@ def letsSendSomeMessages():
 
     while True:
         if queueToSend:
-            #message = queueToSend[0]
-            #sendData(sock, message)
-
-            queueToSend.append(criarMensagem(queueReceived[0]))
-            sendData(sock, queueToSend[0])
+            sendData(sock,queueToSend[0])
             receiveData(sock)
-            del queueReceived[0]
             del queueToSend[0]
 
 
@@ -59,17 +54,14 @@ def receiveData(sock):
 
 
 
-queueToSend.append("Teste")
-queueToSend.append("Teste")
-queueToSend.append("Teste")
-queueToSend.append("Teste")
-queueToSend.append("Teste")
-queueToSend.append("Teste")
-queueToSend.append("Teste")
-
-
-
 a_thread = threading.Thread(target=letsSendSomeMessages)
 a_thread.start()
 b_thread = threading.Thread(target=letsReceiveSomeMessages)
 b_thread.start()
+
+
+
+while True:
+    if queueReceived:
+        queueToSend.append(criarMensagem(queueReceived[0]))
+        del queueReceived[0]
