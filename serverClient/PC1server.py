@@ -20,12 +20,6 @@ def letsSendSomeMessages():
     sock.connect(server_address)
 
     while True:
-
-        data = raw_input("Insira a data: ")
-        cc = raw_input("Insira o CC do utente: ")
-        tipo = raw_input("Insira o tipo pretendido para o pedido (CA,NW): ")
-        descr = raw_input("Insira a descricao: ")
-
         if queueToSend:
             sendData(sock,queueToSend[0])
             receiveData(sock)
@@ -62,6 +56,7 @@ def receiveData(sock):
 
 def background():
     while True:
+
         queueToSend.append(comecarMensagem())
         del queueToSend[0]
 

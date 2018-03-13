@@ -5,7 +5,7 @@ def comecarMensagem():
 
     conn = mysql.connector.connect(
         user='root',
-        password='root',
+        password='',
         host='127.0.0.1',
         database='pedido')
 
@@ -31,13 +31,11 @@ def comecarMensagem():
     cursor.execute("SELECT data FROM Pedido WHERE idPedido =" + str(idP[0]))
     data = cursor.fetchone()
 
-    cursor.execute("SELECT idDoente FROM Pedido WHERE idPedido = " + str(idP[0]))
-    idD = cursor.fetchone()
-
 
     cursor.execute("SELECT nome FROM Utente WHERE idUtenteCC = " + cc)
     nome = cursor.fetchone()
-    nome = nome[0].encode()
+    #nome = nome[0].encode()
+
 
     cursor.execute("SELECT tipo FROM Pedido WHERE idPedido = " + str(idP[0]))
     tipo = cursor.fetchone()
@@ -45,7 +43,6 @@ def comecarMensagem():
 
     cursor.execute("SELECT descricao FROM Pedido WHERE idPedido = %s", (idP[0],))
     desc = cursor.fetchone()
-
 
     cursor.execute("SELECT sexo FROM Utente WHERE idUtenteCC = " + cc)
     sexo = cursor.fetchone()
@@ -68,16 +65,14 @@ def comecarMensagem():
     conn.close()
 
 
-    msh = "MSH|^~\&|A|A|B|B|" + str(data[0]) + "||ORM^O01|" + str(idP[0]) + "|P|2.5||||AL\n"
-    evn = "EVN||" + str(data[0]) + "||AAA|AAA|" + str(data[0]) + "\n"
-    pid = "PID|1||" + cc + "||" + nome + "||" + str(dataNasc) + "|" + str(sexo) + "|||" + str(morada) + "||" + str(telefone[0]) + "|||" + str(sexo) + "\n"
-    pv1 = "PV1|1|I|CON|||||||||" + str(desc[0]) + "||||||||||||||||||||||||||||||||" + str(data[0]) + "\n"
-    orc = "ORC|" + str(tipo[0]) + "|" + str(data[0]) + "\n"
-    orb = "OBR|1|" + str(data[0]) + "||" + str(desc[0]) + "|||" + str(data[0]) + "\n"
+    msh = "MSH|^~\&|A|A|B|B|" + data[0] + "||ORM^O01|" + str(idP[0]) + "|P|2.5||||AL\n"
+    evn = "EVN||" + data[0] + "||AAA|AAA|" + data[0] + "\n"
+    pid = "PID|1||" + cc + "||" + nome[0] + "||" + str(dataNasc) + "|" + str(sexo) + "|||" + str(morada) + "||" + str(telefone[0]) + "|||" + str(sexo) + "\n"
+    pv1 = "PV1|1|I|CON|||||||||" + desc[0] + "||||||||||||||||||||||||||||||||" + data[0] + "\n"
+    orc = "ORC|" + tipo[0] + "|" + data[0] + "\n"
+    orb = "OBR|1|" + data[0] + "||" + desc[0] + "|||" + data[0] + "\n"
 
     aux = msh + evn + pid + pv1 + orc + orb
 
 
     return aux
-
-comecarMensagem()
