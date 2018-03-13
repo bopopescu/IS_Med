@@ -5,7 +5,7 @@ import time
 
 
 global queueReceived
-queueReceived= []
+queueReceived = []
 
 def letsReceiveSomeMessages():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -23,7 +23,7 @@ def letsReceiveSomeMessages():
 
 
 global queueToSend
-queueToSend= []
+queueToSend = []
 
 def letsSendSomeMessages():
     time.sleep(10)
@@ -47,7 +47,7 @@ def sendData(sock,message):
 
 def receiveData(sock):
     data = sock.recv(10000)
-    print("received %s" %data )
+    print("received %s" % data)
     return data
 
 

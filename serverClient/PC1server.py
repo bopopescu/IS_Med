@@ -1,10 +1,16 @@
 import socket
 import threading
-
+from interface import comecarMensagem
 import time
 
+print 'ola'
+
+global queueReceived
+queueReceived = []
+
+
 global queueToSend
-queueToSend= []
+queueToSend = []
 
 def letsSendSomeMessages():
     time.sleep(10)
@@ -14,17 +20,18 @@ def letsSendSomeMessages():
     sock.connect(server_address)
 
     while True:
+
+        data = raw_input("Insira a data: ")
+        cc = raw_input("Insira o CC do utente: ")
+        tipo = raw_input("Insira o tipo pretendido para o pedido (CA,NW): ")
+        descr = raw_input("Insira a descricao: ")
+
         if queueToSend:
             sendData(sock,queueToSend[0])
             receiveData(sock)
             del queueToSend[0]
 
 
-
-
-
-global queueReceived
-queueReceived= []
 
 def letsReceiveSomeMessages():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -38,10 +45,7 @@ def letsReceiveSomeMessages():
     while True:
         data = receiveData(connection).decode()
         queueReceived.append(data)
-        sendData(connection,"Confirmed Reception")
-
-
-
+        sendData(connection, "Confirmed Reception")
 
 
 
@@ -56,10 +60,14 @@ def receiveData(sock):
     return data
 
 
-
-
+def background():
+    while True:
+        queueToSend.append(comecarMensagem())
+        del queueToSend[0]
 
 a_thread = threading.Thread(target=letsSendSomeMessages)
 a_thread.start()
 b_thread = threading.Thread(target=letsReceiveSomeMessages)
 b_thread.start()
+background()
+

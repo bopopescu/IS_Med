@@ -1,11 +1,6 @@
 import mysql.connector
 
-n = 0
-
-
-
-while(1):
-
+def comecarMensagem():
     print("\n\n\nCriar pedido\n")
 
     conn = mysql.connector.connect(
@@ -32,7 +27,6 @@ while(1):
 
     cursor.execute("SELECT idPedido FROM worklist LIMIT 1")
     idP = cursor.fetchone()
-
 
     cursor.execute("SELECT data FROM Pedido WHERE idPedido =" + str(idP[0]))
     data = cursor.fetchone()
@@ -67,6 +61,7 @@ while(1):
 
     cursor.execute("SELECT dataNasc FROM Utente WHERE idUtenteCC = " + cc)
     dataNasc = cursor.fetchone()
+
     dataNasc = dataNasc[0].encode()
 
     cursor.close()
@@ -81,9 +76,8 @@ while(1):
     orb = "OBR|1|" + str(data[0]) + "||" + str(desc[0]) + "|||" + str(data[0]) + "\n"
 
     aux = msh + evn + pid + pv1 + orc + orb
-    text_file = open("Output" + str(n) + ".txt", "w")
-    text_file.write(aux)
-    text_file.close()
-    n += 1
 
-exit()
+
+    return aux
+
+comecarMensagem()

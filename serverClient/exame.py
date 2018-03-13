@@ -4,8 +4,6 @@ import mysql.connector
 data = datetime.now().strftime('%Y%m%d%H%M%S')
 
 
-n = 0
-
 def criarMensagem (msg):
 
     msg_recebida = msg
@@ -59,9 +57,5 @@ def criarMensagem (msg):
 
         cursor.close()
         conn.close()
-        text_file = open("Output_PC2" + str(n) + ".txt", "w")
-        text_file.write(msg)
-        text_file.close()
-        n += 1
-
-    exit()
+        exit()
+    return msg
