@@ -51,6 +51,14 @@ def receiveData(sock):
     return data
 
 
+def background():
+    while True:
+        if queueReceived:
+            queueToSend.append(criarMensagem(queueReceived[0]))
+            del queueReceived[0]
+
+
+
 
 
 
@@ -58,10 +66,5 @@ a_thread = threading.Thread(target=letsSendSomeMessages)
 a_thread.start()
 b_thread = threading.Thread(target=letsReceiveSomeMessages)
 b_thread.start()
+background()
 
-
-
-while True:
-    if queueReceived:
-        queueToSend.append(criarMensagem(queueReceived[0]))
-        del queueReceived[0]
