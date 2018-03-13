@@ -3,7 +3,6 @@ import threading
 from interface import comecarMensagem
 import time
 
-print 'ola'
 
 global queueReceived
 queueReceived = []
