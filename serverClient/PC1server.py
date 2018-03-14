@@ -55,9 +55,7 @@ def receiveData(sock):
 
 def background():
     while True:
-
         queueToSend.append(comecarMensagem())
-        del queueToSend[0]
 
 a_thread = threading.Thread(target=letsSendSomeMessages)
 a_thread.start()

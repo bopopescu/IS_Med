@@ -5,7 +5,7 @@ def comecarMensagem():
 
     conn = mysql.connector.connect(
         user='root',
-        password='',
+        password='root',
         host='127.0.0.1',
         database='pedido')
 
@@ -65,12 +65,12 @@ def comecarMensagem():
     conn.close()
 
 
-    msh = "MSH|^~\&|A|A|B|B|" + data[0] + "||ORM^O01|" + str(idP[0]) + "|P|2.5||||AL\n"
-    evn = "EVN||" + data[0] + "||AAA|AAA|" + data[0] + "\n"
+    msh = "MSH|^~\&|A|A|B|B|" + str(data[0]) + "||ORM^O01|" + str(idP[0]) + "|P|2.5||||AL\n"
+    evn = "EVN||" + str(data[0]) + "||AAA|AAA|" + str(data[0]) + "\n"
     pid = "PID|1||" + cc + "||" + nome[0] + "||" + str(dataNasc) + "|" + str(sexo) + "|||" + str(morada) + "||" + str(telefone[0]) + "|||" + str(sexo) + "\n"
-    pv1 = "PV1|1|I|CON|||||||||" + desc[0] + "||||||||||||||||||||||||||||||||" + data[0] + "\n"
-    orc = "ORC|" + tipo[0] + "|" + data[0] + "\n"
-    orb = "OBR|1|" + data[0] + "||" + desc[0] + "|||" + data[0] + "\n"
+    pv1 = "PV1|1|I|CON|||||||||" + str(desc[0]) + "||||||||||||||||||||||||||||||||" + str(data[0]) + "\n"
+    orc = "ORC|" + str(tipo[0]) + "|" + str(data[0]) + "\n"
+    orb = "OBR|1|" + str(data[0]) + "||" + str(desc[0]) + "|||" + str(data[0]) + "\n"
 
     aux = msh + evn + pid + pv1 + orc + orb
 
