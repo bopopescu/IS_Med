@@ -17,7 +17,7 @@ def letsReceiveSomeMessages():
     connection, client_address = sock.accept()
     print('connection from', client_address)
     while True:
-        data = receiveData(connection).decode()
+        data = receiveData(connection)
         queueReceived.append(data)
         sendData(connection, "Confirmed Reception")
 
@@ -46,7 +46,7 @@ def sendData(sock,message):
 
 
 def receiveData(sock):
-    data = sock.recv(10000)
+    data = sock.recv(10000).decode("utf-8")
     print("received %s" % data)
     return data
 
