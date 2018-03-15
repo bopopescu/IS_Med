@@ -1,7 +1,7 @@
 import mysql.connector
 
 def comecarMensagem():
-    print("\n\n\nCriar pedido\n")
+    print("\n\n> Criar pedido\n")
 
     conn = mysql.connector.connect(
         user='root',

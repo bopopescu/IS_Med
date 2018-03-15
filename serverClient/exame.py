@@ -29,7 +29,7 @@ def criarMensagem (msg):
     id_pedido = pid.split('|', 4)[3]
 
     #recolher input da observacao e inserir na worklist do pc2
-    print("\n\n\nMensagem lida\n")
+    print("\n\n> Mensagem lida\n")
 
     conn = mysql.connector.connect(
         user='root',
