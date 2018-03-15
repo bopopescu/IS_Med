@@ -16,7 +16,8 @@ def criarMensagem (msg):
 
     msh = "MSH|^~\&|B|B|A|A|" + split_msg[0][20:len(split_msg[0])]
 
-    pid =split_msg[1]
+
+    pid =split_msg[2]
     if (pid.split('||||||||||',1)[0][-1]=='F'):
         sexo='F'
     else:
@@ -45,14 +46,9 @@ def criarMensagem (msg):
     cursor = conn.cursor()
     #alterar para os parâmetros da bd do pc2
     try:
-        print("Teste")
-        print(id_pedido)
         sql = "INSERT INTO mydb.worklist(id_pedido, msg, estado) VALUES (%(id_pedido)s, %(msg)s, %(estado)s) "
-        print("after sql")
         cursor.execute(sql, {'id_pedido': id_pedido, 'msg': msg, 'estado': 0 })
-        print("after execute")
         conn.commit()
-        print("after commit")
 
     except:
         conn.rollback()
