@@ -18,7 +18,7 @@ USE `mydb` ;
 -- Table `mydb`.`worklist`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`worklist` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `id_pedido` INT NULL,
   `msg` VARCHAR(450) NULL,
   `estado` VARCHAR(45) NULL,

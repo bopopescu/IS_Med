@@ -1,8 +1,6 @@
 ﻿from datetime import datetime
 import mysql.connector
 
-data = datetime.now().strftime('%Y%m%d%H%M%S')
-
 
 def criarMensagem (msg):
 
@@ -40,16 +38,21 @@ def criarMensagem (msg):
 
     obs = raw_input("Insira as observacoes do exame: ")
 
+    data = datetime.now().strftime('%Y%m%d%H%M%S')
     obx = "OBX|1|TX|||" + str(obs[0]) + "|||||" + str(sexo[0]) + "|||" + str(data) + "|||||""\n"
     msg = msh + "\n" + pid + "\n" + orc + "\n" + obr + "\n" + obx + "\n"
 
     cursor = conn.cursor()
-
     #alterar para os parâmetros da bd do pc2
     try:
-        sql = "INSERT INTO worklist(id_pedido, msg, estado) VALUES (%(data)s, %(msg)s, %(estado)s) "
+        print("Teste")
+        print(id_pedido)
+        sql = "INSERT INTO mydb.worklist(id_pedido, msg, estado) VALUES (%(id_pedido)s, %(msg)s, %(estado)s) "
+        print("after sql")
         cursor.execute(sql, {'id_pedido': id_pedido, 'msg': msg, 'estado': 0 })
+        print("after execute")
         conn.commit()
+        print("after commit")
 
     except:
         conn.rollback()
