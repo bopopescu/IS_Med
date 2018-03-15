@@ -2,6 +2,10 @@ import socket
 import threading
 from exame import criarMensagem
 import time
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 global queueReceived

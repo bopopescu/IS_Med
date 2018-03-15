@@ -5,7 +5,7 @@ def comecarMensagem():
 
     conn = mysql.connector.connect(
         user='root',
-        password='root',
+        password='',
         host='127.0.0.1',
         database='pedido')
 

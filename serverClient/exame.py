@@ -33,14 +33,14 @@ def criarMensagem (msg):
 
     conn = mysql.connector.connect(
         user='root',
-        password='root',
+        password='',
         host='127.0.0.1',
         database='mydb')
 
     obs = raw_input("Insira as observacoes do exame: ")
 
     data = datetime.now().strftime('%Y%m%d%H%M%S')
-    obx = "OBX|1|TX|||" + str(obs[0]) + "|||||" + str(sexo[0]) + "|||" + str(data) + "|||||""\n"
+    obx = "OBX|1|TX|||" + str(obs) + "|||||" + str(sexo[0]) + "|||" + str(data) + "|||||""\n"
     msg = msh + "\n" + pid + "\n" + orc + "\n" + obr + "\n" + obx + "\n"
 
     cursor = conn.cursor()
