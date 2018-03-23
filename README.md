@@ -1,52 +1,39 @@
 # IS_Med
 
-
 Gerador De mensagens:
     Gera X mensagens e coloca na worklist
 
 
+Gera Bloco:
+    Recebe lista de mensagens e concatena com ‘!’ no fim de cada mensagem
+    devolve bloco
+
+
+Gerador ACK’s:
+    recebe bloco e gera ACK’s
+
+
 Servidor PC1:
-    vai á work list pega na messagem .. envia .. e preenche o timestamp e ack
-
-
-Cliente PC1:
-    recebe ACK’s
-    preenche na worklist timestamp e ack recebido
-
-
-Servidor PC2:
-    envia ACk’s
-    envia relatórios se já estiverem preenchidos
+    vai á work list pega em X mensagens
+    gera Bloco
+    gera ACK’s
+    envia Bloco
+    regista timestamp e ack’s
+    espera resposta
+    imprime tempo que demorou.
+    se não receber resposta em 1 min reenvia bloco
 
 
 Cliente PC2:
     recebe mensagens
-    guarda na worklist
-
-
-
-Gerador de Relatórios:
-    Mostra informações ao Utilizador e pede relatório
-    preenche a BD
+    gera ACK’s
+    envia ack’s em bloco
 
 
 
 
 
-BD1:
-    Worklist:
-        Novos Campos:
-                timestamp enviado (sentTime)
-                timestamp receção (recTime)
-                ACK (ack)
-    Pedido:
-        Novo Campo:
-            Relatório (rel)
 
-BD2:
-    Worklist:
-        Novos Campos:
-            ACK (ack)
-            ack enviado (ackSent)
-            relatório (rel)
-            relatório enviado (relSent)
+Servidor PC2: Não é necessário para este teste de tempos
+Cliente PC1: Não é necessário para este teste de tempos
+Gerador de Relatórios: Não é necessário para este teste de tempos
