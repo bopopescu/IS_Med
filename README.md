@@ -6,11 +6,11 @@ Gerador De mensagens:
 
 Gera Bloco:
     Recebe lista de mensagens e concatena com ‘!’ no fim de cada mensagem
-    devolve bloco
+    devolve bloco e bloco de ack's
 
 
-Gerador ACK’s:
-    recebe bloco e gera ACK’s
+Gerador mensagens ACK:
+    recebe bloco e gera bloco mensagens ACK
 
 
 Servidor PC1:
