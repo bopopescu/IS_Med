@@ -1,7 +1,7 @@
 # IS_Med
 
 Gerador De mensagens:
-    Gera X mensagens e coloca na worklist
+    Gera X mensagens    e coloca na worklist
 
 
 Gera Bloco:
@@ -20,8 +20,10 @@ Servidor PC1:
     envia Bloco
     regista timestamp e ack’s
     espera resposta
-    imprime tempo que demorou.
-    se não receber resposta em 1 min reenvia bloco
+        confirma resposta
+            reenvia alguma mensagem se necessário
+        se não receber resposta em 1 min reenvia bloco
+    vai imprimindo médias de mensagens enviadas por minuto
 
 
 Cliente PC2:
