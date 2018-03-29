@@ -6,7 +6,7 @@ def gerarMensagens(num):
     bloco = []
     conn = mysql.connector.connect(
         user='root',
-        password='',
+        password='root',
         host='127.0.0.1',
         database='pedido')
 
