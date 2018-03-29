@@ -25,12 +25,12 @@ def gerarMensagens(num):
         data = datetime.now().strftime('%Y%m%d%H%M%S')
 
         try:
-            sql = "INSERT INTO pedido.worklist(data, msg) VALUES (%(data)s, %(msg)s) "
-            cursor.execute(sql, {'data': data, 'msg': msg, })
+            sql = "INSERT INTO pedido.worklist(msg) VALUES (%(msg)s)"
+            cursor.execute(sql, {'msg': msg, })
             conn.commit()
         except:
             conn.rollback()
 
     #print bloco[]
 
-#gerarMensagens(2)
+gerarMensagens(10)
