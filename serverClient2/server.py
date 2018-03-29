@@ -115,7 +115,7 @@ def background():
         blocks = (float(nBlock))/minutes
         req = nBlock*nReq
         print "\n\n"
-        print str(nBlock) + " blocks sent. A total of " + str(req) + "requests."
+        print str(nBlock) + " blocks sent. A total of " + str(req) + " requests."
         print str(minutes) + " minutes have passed."
         print "MEAN:\n"+str(blocks)+" blocks per minute." + str(float(req)/minutes) + " requests per minute."
 
