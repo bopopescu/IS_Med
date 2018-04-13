@@ -33,4 +33,4 @@ def gerarMensagens(num):
 
     #print bloco[]
 
-gerarMensagens(100)
+gerarMensagens(1000)
