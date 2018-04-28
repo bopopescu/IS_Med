@@ -28,9 +28,14 @@ def instructions():
     print "\t\tpython background -r XXXX-XXXX-XXXX-XXXX YYYY-YYYY-YYYY-YYYY ZZZZ-ZZZZ-ZZZZ-ZZZZ"
 
 def background():
-    headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
-    r = requests.get('https://pub.orcid.org/v2.1/0000-0003-4121-6169/works',headers=headers)
-    print r.json()
+    orcidList = ["0000-0003-4121-6169"]
+    for orcid in orcidList:
+        headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+        r = requests.get('https://pub.orcid.org/v2.1/'+orcid+'/works',headers=headers)
+        reqJson = r.json()
+        for art in reqJson["group"]:
+            artTitle = art["work-summary"][0]["title"]["title"]["value"]
+            print orcid + " | " + artTitle
 
 
 array = sys.argv
