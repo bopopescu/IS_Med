@@ -60,7 +60,7 @@ def remORCID(listaORCID):
 
 def instructions():
     print "HELP:"
-    print "\tSart background syncing process:"
+    print "\tStart background syncing process:"
     print "\t\tpython background"
     print "\tList ORCID being analyzed:"
     print "\t\tpython background -l"
@@ -80,10 +80,39 @@ def background():
             r = requests.get('https://pub.orcid.org/v2.1/'+orcid+'/works',headers=headers)
             reqJson = r.json()
             for art in reqJson["group"]:
-                artTitle = art["work-summary"][0]["title"]["title"]["value"]
-                print orcid + " | " + artTitle
+                workFL = []
+                # Verifica se alguma das referencias de um artigo tem ligacao ao scopus se tiver adiciona a lista WorkFL
+                for work in art["work-summary"]:
+                    for eid in work["external-ids"]["external-id"]:
+                        if (eid["external-id-type"]=="eid"):
+                            workFL.append(work)
+                if (workFL == []):
+                    # Caso nenhuma das referencias esteja ligada ao scopus apenas guarda o titulo
+                    artTitle = art["work-summary"][0]["title"]["title"]["value"]
+                    saveWithoutScopus(orcid, artTitle)
+                else:
+                    # Caso hajam varias referencias com ligacao ao scopus analisa a que tem display-index menor
+                    workF = workFL[0]
+                    for work in workFL:
+                        if (int(work["display-index"]) < int(workF["display-index"])):
+                            workF = work
+                    artTitle = workF["title"]["title"]["value"]
+                    lastModDate = art["last-modified-date"]["value"]
+                    year = work["publication-date"]["year"]["value"]
+                    eid = ""
+                    for eids in workF["external-ids"]["external-id"]:
+                        if (eids["external-id-type"]=="eid"):
+                            eid = eids["external-id-value"].split("-")[2]
+                    print orcid + "||" + artTitle + "||" + year + "||" + str(lastModDate) + "||" + eid
         orcidList = getOrcidsDB()
         time.sleep(5)
+
+
+
+def saveWithoutScopus(orcid, artTitle):
+    print orcid + "|-|" + artTitle
+
+
 
 
 
