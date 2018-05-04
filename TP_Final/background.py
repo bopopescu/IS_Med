@@ -96,14 +96,7 @@ def background():
                     for work in workFL:
                         if (int(work["display-index"]) < int(workF["display-index"])):
                             workF = work
-                    artTitle = workF["title"]["title"]["value"]
-                    lastModDate = art["last-modified-date"]["value"]
-                    year = work["publication-date"]["year"]["value"]
-                    eid = ""
-                    for eids in workF["external-ids"]["external-id"]:
-                        if (eids["external-id-type"]=="eid"):
-                            eid = eids["external-id-value"].split("-")[2]
-                    print orcid + "||" + artTitle + "||" + year + "||" + str(lastModDate) + "||" + eid
+                    saveWithScopus(orcid,art["last-modified-date"]["value"],workF)
         orcidList = getOrcidsDB()
         time.sleep(5)
 
@@ -112,14 +105,26 @@ def background():
 def saveWithoutScopus(orcid, artTitle):
     print orcid + "|-|" + artTitle
 
+def saveWithScopus(orcid,lastModDate,work):
+    artTitle = work["title"]["title"]["value"]
+    year = work["publication-date"]["year"]["value"]
+    scopusID = ""
+    for eid in work["external-ids"]["external-id"]:
+        if (eid["external-id-type"]=="eid"):
+            scopusID = eid["external-id-value"]
 
+    headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+    r = requests.get('https://api.elsevier.com/content/abstract/citations?scopus_id=' + scopusID + '&apiKey=d92430e71d0301c5566798772863be1d&httpAccept=application%2Fjson',headers=headers)
+    reqJson = r.json()
+    print orcid + "||" + artTitle + "||" + year + "||" + str(lastModDate) + "||" + scopusID
+    print reqJson
+                    
 
 
 
 
 
 orcidList = getOrcidsDB()
-
 array = sys.argv
 del array[0]
 
