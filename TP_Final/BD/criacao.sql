@@ -23,7 +23,7 @@ USE `ISfinal` ;
 CREATE TABLE IF NOT EXISTS `ISfinal`.`Artigos` (
   `idArtigos` INT NOT NULL AUTO_INCREMENT,
   `putCode` INT NULL,
-  `lastModifiedDate` INT NULL,
+  `lastModifiedDate` BIGINT NULL,
   `titulo` VARCHAR(145) NOT NULL,
   `ano` INT NULL,
   `localpub` VARCHAR(200) NULL,
