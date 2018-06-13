@@ -7,7 +7,7 @@ conn = mysql.connector.connect(
         user='root',
         password='',
         host='127.0.0.1',
-        database='ISfinal')
+        database='isfinal')
 cursor = conn.cursor()
 
 
@@ -23,52 +23,55 @@ def verify(array):
     del array[0]
     for orcid in array:
         if (len(orcid)!=19):
-            print "Orcid with invalid format!"
+            print("Orcid with invalid format!")
             return False
         for i in range(len(orcid)):
             if (i==4 or i==9 or i==14):
                 if (orcid[i]!="-"):
-                    print "Orcid with invalid format!"
+                    print("Orcid with invalid format!")
                     return False
             elif (not orcid[i].isdigit()):
-                print "Orcid with invalid format!"
+                print("Orcid with invalid format!")
                 return False
     return True
 
 def listORCID():
     for (id,orcid) in orcidList:
-        print orcid
+        print(orcid)
+
 
 def addORCID(listaORCID):
     for orcid in listaORCID:
         if (not orcidList.__contains__(orcid)):
             cursor.execute("Insert into ISfinal.Orcid(orcid) values (\""+orcid+"\");")
             conn.commit()
-            print orcid+" inserted."
+            print(orcid + " inserted.")
         else:
-            print orcid+" already exists."
+            print(orcid + " already exists.")
+
 
 def remORCID(listaORCID):
     for orcid in listaORCID:
         if (orcidList.__contains__(orcid)):
             cursor.execute("Delete from ISfinal.Orcid where orcid=\""+orcid+"\";")
             conn.commit()
-            print orcid+ " removed."
+            print(orcid + " removed.")
         else:
-            print orcid+ " doesnt exist."
+            print(orcid + " doesnt exist.")
+
 
 def instructions():
-    print "HELP:"
-    print "\tStart background syncing process:"
-    print "\t\tpython background"
-    print "\tList ORCID being analyzed:"
-    print "\t\tpython background -l"
-    print "\tAdd ORCID('s) to be analyzed:"
-    print "\t\tpython background -a XXXX-XXXX-XXXX-XXXX"
-    print "\t\tpython background -a XXXX-XXXX-XXXX-XXXX YYYY-YYYY-YYYY-YYYY ZZZZ-ZZZZ-ZZZZ-ZZZZ"
-    print "\tRemove ORCID('s) from being analyzed:"
-    print "\t\tpython background -r XXXX-XXXX-XXXX-XXXX"
-    print "\t\tpython background -r XXXX-XXXX-XXXX-XXXX YYYY-YYYY-YYYY-YYYY ZZZZ-ZZZZ-ZZZZ-ZZZZ"
+    print("HELP:")
+    print("\tStart background syncing process:")
+    print("\t\tpython background")
+    print("\tList ORCID being analyzed:")
+    print("\t\tpython background -l")
+    print("\tAdd ORCID('s) to be analyzed:")
+    print("\t\tpython background -a XXXX-XXXX-XXXX-XXXX")
+    print("\t\tpython background -a XXXX-XXXX-XXXX-XXXX YYYY-YYYY-YYYY-YYYY ZZZZ-ZZZZ-ZZZZ-ZZZZ")
+    print("\tRemove ORCID('s) from being analyzed:")
+    print("\t\tpython background -r XXXX-XXXX-XXXX-XXXX")
+    print("\t\tpython background -r XXXX-XXXX-XXXX-XXXX YYYY-YYYY-YYYY-YYYY ZZZZ-ZZZZ-ZZZZ-ZZZZ")
 
 
 def background():
@@ -111,7 +114,8 @@ def background():
 
 
 def saveWithoutScopus(idArt,idorcid, artTitle):
-    print str(idorcid) + "|-|" + artTitle
+    print(str(idorcid) + "|-|" + artTitle)
+
 
 def saveWithScopus(idArt,idorcid,lastModDate,work):
     artTitle = work["title"]["title"]["value"]
@@ -120,8 +124,8 @@ def saveWithScopus(idArt,idorcid,lastModDate,work):
     for eid in work["external-ids"]["external-id"]:
         if (eid["external-id-type"]=="eid"):
             scopusID = eid["external-id-value"]
-    print str(idorcid) + "||" + artTitle + "||" + year + "||" + str(lastModDate) + "||" + scopusID
-#    headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
+    print(str(idorcid) + "||" + artTitle + "||" + year + "||" + str(lastModDate) + "||" + scopusID)
+    #    headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
 #    r = requests.get('https://api.elsevier.com/content/abstract/citations?scopus_id=' + scopusID + '&apiKey=4bea4f758eda4188f6923c7a4c851380&httpAccept=application%2Fjson',headers=headers)
 #    reqJson = r.json()
 #    print reqJson

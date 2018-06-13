@@ -110,7 +110,6 @@ def createTable(id_Orcid):
                                 </div>
                             </body>
                         </html>""")
-    table.close()
 
 
 def renderButton():
