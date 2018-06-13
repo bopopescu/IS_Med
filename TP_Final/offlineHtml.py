@@ -18,33 +18,132 @@ def htmlTop():
     index.write(""" <!DOCTYPE html>
                     <html lang="en">
                         <head>
+                            <meta charset=UTF-8/>
                             <link rel="stylesheet" type="text/css" href="index.css">
-                            <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
-                            <link rel="stylesheet" type="text/css" href="w3.css">
-                            <meta charset="utf-8"/>
+                            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
                             <title>Offline HTML</title>
                         </head>
-                        <header class="w3-container w3-flat-wet-asphalt">
+                        <header class="header">
                             <div class="row">
-                                <div class="col-md-10 col-xs-12">
-                                <h2 class="title w3-margin w3-jumbo">IS - Sistema ORCID</h2>
-                                </div>
+                                <h2 class="title">IS - Sistema ORCID</h2>
                             </div>
                         </header>
-                        <body>""")
+                        <body>
+                            <script>
+                                $(document).ready(function(){
+                                    $('[data-toggle="tooltip"]').tooltip();   
+                                });
+                            </script>
+                            <div id="text-container">
+                                <p id="texto"> O sistema <em>ORCID</em> <a href="http://orcid.org">(http://orcid.org)</a> fornece um identificador único a cada investigador, que o distingue de qualquer outro, e suporta
+                                    ligações automáticas com outros repositórios científicos (tais como o <em>SCOPUS</em> ou o <em>RESEARCHID</em>), garantindo o reconhecimento do
+                                    trabalho realizado.<br>
+                                    Esta página Web permite listar as várias informações de cada <em>orcid</em> recolhido de forma totalmente <b><em>offline</em></b>, ou seja, diretamente da Base De Dados onde a informação se encontra
+                                    guardada.
+                                </p>
+                            </div>""")
 
-def htmlTail():
-    index.write("""<footer class="w3-container w3-padding-64 w3-center w3-opacity">
-                        <p>Powered by
-                            <a >Grupo 5</a>
-                        </p>
-                    </footer>
-                </body>
-            </html>""")
+
+def renderTablePage(table):
+    table.write(""" <!DOCTYPE html>
+                    <html lang="en">
+                        <head>
+                            <meta charset=UTF-8/>
+                            <link rel="stylesheet" type="text/css" href="index.css">
+                            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                            <title>Offline HTML</title>
+                        </head>
+                        <header class="header">
+                            <div class="row">
+                                <h2 class="title">IS - Sistema ORCID</h2>
+                            </div>
+                        </header>
+                        <body>
+                            <script>
+                                    $(document).ready(function(){
+                                        $('[data-toggle="tooltip"]').tooltip();   
+                                    });
+                            </script>
+                            <div id="text-container">
+                                <p id="texto"> Na tabela seguinte encontra-se toda a informação recolhida na Base de Dados para o <em>orcid</em> selecionado:
+                                </p>
+                            </div>
+                                <table id="tabelas" border='1' width = "80%">
+                                <tr>
+                                    <th id ="tituloTabelas"><em>Orcid</em></th>
+                                    <th id ="tituloTabelas"><em>putCode</em></th>
+                                    <th id ="tituloTabelas"><em>lastModifiedDate</em></th>
+                                    <th id ="tituloTabelas"><em>titulo</em></th>
+                                    <th id ="tituloTabelas"><em>ano</em></th>
+                                    <th id ="tituloTabelas"><em>localpub</em></th>
+                                    <th id ="tituloTabelas"><em>scopus</em></th>
+                                </tr>""")
+
+def createTable(id_Orcid):
+    orcid = getOrcidFromId(id_Orcid)
+    table = open('table' + orcid + '.html', "w")
+    renderTablePage(table)
+    for tuples in has_artigos:
+        if tuples[0] == id_Orcid:
+            art = getArtigoFromId(tuples[1])
+
+            table.write("<tr>")
+            table.write("<td id ='elemTabelas'>{0}</td>".format(orcid))
+            table.write("<td id ='elemTabelas'>{0}</td>".format(art[1]))
+            table.write("<td id ='elemTabelas'>{0}</td>".format(art[2]))
+            table.write("<td id ='elemTabelas'>{0}</td>".format(art[3]))
+            table.write("<td id ='elemTabelas'>{0}</td>".format(art[4]))
+            table.write("<td id ='elemTabelas'>{0}</td>".format(art[5]))
+            table.write("<td id ='elemTabelas'>{0}</td>".format(art[6]))
+
+    table.write("</tr>")
+    table.write("</table>")
+    table.write("""
+                                <div id="footer">
+                                    <p id="footer_text">Realizado por
+                                        <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">Grupo 5</a>
+                                    </p>
+                                </div>
+                            </body>
+                        </html>""")
+    table.close()
+
+
+def renderButton():
+    idOrcids = []
+    index.write("""
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" id ="botao" type="button" data-toggle="dropdown">Selecionar Orcid  <span class="caret"></span></button>
+                                <ul class="dropdown-menu">""")
+    for frst in has_artigos:
+        idOrcids.append(frst)
+
+    difOrcids = list(dict(idOrcids).items())
+    for difs in difOrcids:
+        createTable(difs[0])
+        orcid = getOrcidFromId(difs[0])
+        index.write("""
+                                    <li id = "botao_elems"><a href={0}>{1}</a></li>""".format('table'+orcid+'.html', orcid))
+    index.write("""
+                                </ul>""")
+    index.write("""
+                            </div>""")
+    index.write("""
+                                <div id="footer">
+                                    <p id="footer_text">Realizado por
+                                        <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">Grupo 5</a>
+                                    </p>
+                                </div>
+                            </body>
+                        </html>""")
 
 
 
-def selectHasArtigos(conn,cursor):
+def selectHasArtigos(conn, cursor):
    sql = "SELECT * FROM isfinal.orcid_has_artigos"
    cursor.execute(sql)
    has_artigos = cursor.fetchall()
@@ -64,40 +163,12 @@ def getOrcidFromId(id):
     return orcid[0]
 
 
-def createTable():
-    index.write("<table border='1'>")
-    index.write("<tr>")
-    index.write("<th>Orcid</th>")
-    index.write("<th>putCode</th>")
-    index.write("<th>lastModifiedDate</th>")
-    index.write("<th>titulo</th>")
-    index.write("<th>ano</th>")
-    index.write("<th>localpub</th>")
-    index.write("<th>scopus</th>")
-    index.write("</tr>")
-
-    for frst in has_artigos:
-        orcid = getOrcidFromId(frst[0])
-        art = getArtigoFromId(frst[1])
-        index.write("<tr>")
-        index.write("<td>{0}</td>".format(orcid))
-        index.write("<td>{0}</td>".format(art[1]))
-        index.write("<td>{0}</td>".format(art[2]))
-        index.write("<td>{0}</td>".format(art[3]))
-        index.write("<td>{0}</td>".format(art[4]))
-        index.write("<td>{0}</td>".format(art[5]))
-        index.write("<td>{0}</td>".format(art[6]))
-        index.write("</tr>")
-    index.write("</table>")
 
 htmlTop()
-
 conn, cursor = connectionDB()
 has_artigos = selectHasArtigos(conn, cursor)
-createTable()
+renderButton()
 cursor.close()
-
-htmlTail()
 index.close()
 webbrowser.open_new_tab('index.html')
 
