@@ -37,7 +37,7 @@ html * {
 
 
 #botao{
-  margin-top: 70px;  
+  margin-top: 50px;  
   
 }
 
@@ -45,6 +45,14 @@ html * {
   text-align: center;
 }
 
+#all_button_div{
+  margin-top: 70px;
+  text-align: center;
+}
+
+#all_button{
+  background-color: #DDDDDD;
+}
 #text-container{
   margin: 20px;
 }

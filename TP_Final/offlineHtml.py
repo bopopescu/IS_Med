@@ -69,7 +69,7 @@ def renderTablePage(table):
                                     });
                             </script>
                             <div id="text-container">
-                                <p id="texto"> Na tabela seguinte encontra-se toda a informação recolhida na Base de Dados para o <em>orcid</em> selecionado:
+                                <p id="texto"> Na tabela seguinte encontra-se toda a informação recolhida na Base de Dados para a opção selecionada selecionada:
                                 </p>
                             </div>
                                 <table id="tabelas" border='1' width = "80%">
@@ -104,15 +104,51 @@ def createTable(id_Orcid):
     table.write("</table>")
     table.write("""
                                 <div id="footer">
-                                    <p id="footer_text">Realizado por
-                                        <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">Grupo 5</a>
+                                    <p id="footer_text">Realizado
+                                        <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">por:</a>
                                     </p>
                                 </div>
                             </body>
                         </html>""")
 
 
-def renderButton():
+def createAllTables():
+    tables = open("allTables.html", "w")
+    renderTablePage(tables)
+
+
+    for frst in has_artigos:
+        orcid = getOrcidFromId(frst[0])
+        art = getArtigoFromId(frst[1])
+        tables.write("<tr>")
+        tables.write("<td id ='elemTabelas'>{0}</td>".format(orcid))
+        tables.write("<td id ='elemTabelas'>{0}</td>".format(art[1]))
+        tables.write("<td id ='elemTabelas'>{0}</td>".format(art[2]))
+        tables.write("<td id ='elemTabelas'>{0}</td>".format(art[3]))
+        tables.write("<td id ='elemTabelas'>{0}</td>".format(art[4]))
+        tables.write("<td id ='elemTabelas'>{0}</td>".format(art[5]))
+        tables.write("<td id ='elemTabelas'>{0}</td>".format(art[6]))
+
+    tables.write("</tr>")
+    tables.write("</table>")
+    tables.write("""
+                                        <div id="footer">
+                                            <p id="footer_text">Realizado 
+                                                <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">por:</a>
+                                            </p>
+                                        </div>
+                                    </body>
+                                </html>""")
+
+def renderAllButton():
+    index.write("""
+                            <div id = "all_button_div">
+                                 <a href ={0} class ="btn btn-default" id ="all_button" >Mostrar Todos os Orcid </a>
+                            </div>""".format('allTables.html'))
+
+
+
+def renderSelectButton():
     idOrcids = []
     index.write("""
                             <div class="dropdown">
@@ -133,8 +169,8 @@ def renderButton():
                             </div>""")
     index.write("""
                                 <div id="footer">
-                                    <p id="footer_text">Realizado por
-                                        <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">Grupo 5</a>
+                                    <p id="footer_text">Realizado
+                                        <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">por:</a>
                                     </p>
                                 </div>
                             </body>
@@ -166,7 +202,9 @@ def getOrcidFromId(id):
 htmlTop()
 conn, cursor = connectionDB()
 has_artigos = selectHasArtigos(conn, cursor)
-renderButton()
+renderAllButton()
+renderSelectButton()
+createAllTables()
 cursor.close()
 index.close()
 webbrowser.open_new_tab('index.html')
