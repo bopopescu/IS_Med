@@ -92,7 +92,9 @@ def background():
         cursor.execute("Delete from ISfinal.Artigos;")
         for (idorcid,orcid) in orcidList:
             headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
-            r = requests.get('https://pub.orcid.org/v2.1/'+orcid+'/works',headers=headers)
+            print (orcid)
+            aux = 'https://pub.orcid.org/v2.1/' + orcid.decode(encoding='UTF-8',errors='strict') + '/works'
+            r = requests.get(aux,headers=headers)
             reqJson = r.json()
             for art in reqJson["group"]:
                 workFL = []
@@ -145,12 +147,6 @@ def saveWithScopus(idArt,idorcid,lastModDate,work):
 
 
                     
-
-
-
-
-
-
 
 orcidList = getOrcidsDB()
 array = sys.argv
