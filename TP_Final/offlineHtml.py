@@ -1,6 +1,5 @@
 import mysql.connector
 import webbrowser
-import codecs
 
 def connectionDB():
     conn = mysql.connector.connect(
@@ -17,9 +16,9 @@ conn, cursor = connectionDB()
 
 def htmlTop(index):
     index.write(""" <!DOCTYPE html>
-                    <html lang="en">
+                    <html lang="pt">
                         <head>
-                            <meta charset=UTF-8/>
+                            <meta charset="UTF-8" http-equiv="refresh" content="120"/>
                             <link rel="stylesheet" type="text/css" href="index.css">
                             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
                             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -49,9 +48,9 @@ def htmlTop(index):
 
 def renderTablePage(table, index):
     table.write(""" <!DOCTYPE html>
-                    <html lang="en">
+                    <html lang="pt">
                         <head>
-                            <meta charset=UTF-8/>
+                            <meta charset="UTF-8" http-equiv="refresh" content="120"/>
                             <link rel="stylesheet" type="text/css" href="index.css">
                             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
                             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -70,7 +69,7 @@ def renderTablePage(table, index):
                                     });
                             </script>
                             <div id="text-container">
-                                <p id="texto"> Na tabela seguinte encontra-se toda a informação recolhida na Base de Dados para a opção selecionada selecionada:
+                                <p id="texto"> Na tabela seguinte encontra-se toda a informação recolhida da Base de Dados para a opção selecionada selecionada:
                                 </p>
                             </div>
                                 <table id="tabelas" border='1' width = "80%">
@@ -105,9 +104,7 @@ def createTable(id_Orcid, has_artigos, index, cursor):
     table.write("</table>")
     table.write("""
                                 <div id="footer">
-                                    <p id="footer_text">Realizado
-                                        <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">por:</a>
-                                    </p>
+                                     <p id="footer_text">Realizado <b>por</b>: Adriana Guedes, Bruno Sousa, Marco Barbosa, Ricardo Certo</p>
                                 </div>
                             </body>
                         </html>""")
@@ -134,9 +131,7 @@ def createAllTables(has_artigos, index, cursor):
     tables.write("</table>")
     tables.write("""
                                         <div id="footer">
-                                            <p id="footer_text">Realizado 
-                                                <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">por:</a>
-                                            </p>
+                                             <p id="footer_text">Realizado <b>por</b>: Adriana Guedes, Bruno Sousa, Marco Barbosa, Ricardo Certo</p>
                                         </div>
                                     </body>
                                 </html>""")
@@ -169,10 +164,9 @@ def renderSelectButton(has_artigos,index, cursor):
     index.write("""
                             </div>""")
     index.write("""
+                            
                                 <div id="footer">
-                                    <p id="footer_text">Realizado
-                                        <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">por:</a>
-                                    </p>
+                                    <p id="footer_text">Realizado <b>por</b>: Adriana Guedes, Bruno Sousa, Marco Barbosa, Ricardo Certo</p>
                                 </div>
                             </body>
                         </html>""")
@@ -198,8 +192,11 @@ def getOrcidFromId(id, cursor):
     orcid = cursor.fetchone()
     return orcid[0]
 
+    
+
+
 def main():
-    index = codecs.open("index.html", "w", "utf-8")
+    index = open("index.html", "w")
     conn, cursor = connectionDB()
     htmlTop(index)
     renderAllButton(index)
