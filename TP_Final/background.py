@@ -2,6 +2,8 @@ import requests
 import sys
 import time
 import mysql.connector
+import offlineHtml
+import webbrowser
 
 conn = mysql.connector.connect(
         user='root',
@@ -74,6 +76,11 @@ def instructions():
     print("\t\tpython background -r XXXX-XXXX-XXXX-XXXX YYYY-YYYY-YYYY-YYYY ZZZZ-ZZZZ-ZZZZ-ZZZZ")
 
 
+def page():
+    offlineHtml.main()
+
+
+
 def background():
     cursor.execute("Delete from ISfinal.Orcid_has_Artigos;")
     cursor.execute("Delete from ISfinal.Artigos;")
@@ -109,6 +116,7 @@ def background():
                     idArt+=1
         conn.commit()
         orcidList = getOrcidsDB()
+        page()
         time.sleep(5)
 
 

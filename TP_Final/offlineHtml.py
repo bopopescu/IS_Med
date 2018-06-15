@@ -1,6 +1,6 @@
 import mysql.connector
 import webbrowser
-
+import codecs
 
 def connectionDB():
     conn = mysql.connector.connect(
@@ -12,9 +12,10 @@ def connectionDB():
     return conn, cursor
 
 
-index = open("index.html", "w")
 
-def htmlTop():
+conn, cursor = connectionDB()
+
+def htmlTop(index):
     index.write(""" <!DOCTYPE html>
                     <html lang="en">
                         <head>
@@ -46,7 +47,7 @@ def htmlTop():
                             </div>""")
 
 
-def renderTablePage(table):
+def renderTablePage(table, index):
     table.write(""" <!DOCTYPE html>
                     <html lang="en">
                         <head>
@@ -83,13 +84,13 @@ def renderTablePage(table):
                                     <th id ="tituloTabelas"><em>scopus</em></th>
                                 </tr>""")
 
-def createTable(id_Orcid):
-    orcid = getOrcidFromId(id_Orcid)
+def createTable(id_Orcid, has_artigos, index, cursor):
+    orcid = getOrcidFromId(id_Orcid, cursor)
     table = open('table' + orcid + '.html', "w")
-    renderTablePage(table)
+    renderTablePage(table, index)
     for tuples in has_artigos:
         if tuples[0] == id_Orcid:
-            art = getArtigoFromId(tuples[1])
+            art = getArtigoFromId(tuples[1], cursor)
 
             table.write("<tr>")
             table.write("<td id ='elemTabelas'>{0}</td>".format(orcid))
@@ -112,14 +113,14 @@ def createTable(id_Orcid):
                         </html>""")
 
 
-def createAllTables():
+def createAllTables(has_artigos, index, cursor):
     tables = open("allTables.html", "w")
-    renderTablePage(tables)
+    renderTablePage(tables, index)
 
 
     for frst in has_artigos:
-        orcid = getOrcidFromId(frst[0])
-        art = getArtigoFromId(frst[1])
+        orcid = getOrcidFromId(frst[0], cursor)
+        art = getArtigoFromId(frst[1], cursor)
         tables.write("<tr>")
         tables.write("<td id ='elemTabelas'>{0}</td>".format(orcid))
         tables.write("<td id ='elemTabelas'>{0}</td>".format(art[1]))
@@ -140,7 +141,7 @@ def createAllTables():
                                     </body>
                                 </html>""")
 
-def renderAllButton():
+def renderAllButton(index):
     index.write("""
                             <div id = "all_button_div">
                                  <a href ={0} class ="btn btn-default" id ="all_button" >Mostrar Todos os Orcid </a>
@@ -148,7 +149,7 @@ def renderAllButton():
 
 
 
-def renderSelectButton():
+def renderSelectButton(has_artigos,index, cursor):
     idOrcids = []
     index.write("""
                             <div class="dropdown">
@@ -159,8 +160,8 @@ def renderSelectButton():
 
     difOrcids = list(dict(idOrcids).items())
     for difs in difOrcids:
-        createTable(difs[0])
-        orcid = getOrcidFromId(difs[0])
+        createTable(difs[0], has_artigos, index, cursor)
+        orcid = getOrcidFromId(difs[0], cursor)
         index.write("""
                                     <li id = "botao_elems"><a href={0}>{1}</a></li>""".format('table'+orcid+'.html', orcid))
     index.write("""
@@ -178,34 +179,40 @@ def renderSelectButton():
 
 
 
-def selectHasArtigos(conn, cursor):
+def selectHasArtigos(cursor):
    sql = "SELECT * FROM isfinal.orcid_has_artigos"
    cursor.execute(sql)
    has_artigos = cursor.fetchall()
    return has_artigos
 
 
-def getArtigoFromId(id):
+def getArtigoFromId(id, cursor):
     sql = "SELECT * FROM isfinal.artigos WHERE idArtigos = %s" %id
     cursor.execute(sql)
     artigo = cursor.fetchone()
     return artigo
 
-def getOrcidFromId(id):
+def getOrcidFromId(id, cursor):
     sql = "SELECT orcid FROM isfinal.orcid WHERE idOrcid = %s" %id
     cursor.execute(sql)
     orcid = cursor.fetchone()
     return orcid[0]
 
+def main():
+    index = codecs.open("index.html", "w", "utf-8")
+    conn, cursor = connectionDB()
+    htmlTop(index)
+    renderAllButton(index)
+    has_artigos = selectHasArtigos(cursor)
+    renderSelectButton(has_artigos, index, cursor)
+    createAllTables(has_artigos, index, cursor)
+    cursor.close()
+    index.close()
+    webbrowser.open_new_tab('index.html')
 
 
-htmlTop()
-conn, cursor = connectionDB()
-has_artigos = selectHasArtigos(conn, cursor)
-renderAllButton()
-renderSelectButton()
-createAllTables()
-cursor.close()
-index.close()
-webbrowser.open_new_tab('index.html')
+
+if __name__ == "__main__":
+    main()
+
 
