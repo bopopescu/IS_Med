@@ -18,7 +18,7 @@ def htmlTop(index):
     index.write(""" <!DOCTYPE html>
                     <html lang="pt">
                         <head>
-                            <meta charset="UTF-8" http-equiv="refresh" content="120"/>
+                            <meta charset="UTF-8""/>
                             <link rel="stylesheet" type="text/css" href="index.css">
                             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
                             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -50,7 +50,7 @@ def renderTablePage(table, index):
     table.write(""" <!DOCTYPE html>
                     <html lang="pt">
                         <head>
-                            <meta charset="UTF-8" http-equiv="refresh" content="120"/>
+                            <meta charset="UTF-8" http-equiv="refresh" content="5"/>
                             <link rel="stylesheet" type="text/css" href="index.css">
                             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
                             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
