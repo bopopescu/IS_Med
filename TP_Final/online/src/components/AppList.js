@@ -5,7 +5,15 @@ import React, { Component } from 'react';
 class AppList extends Component {
     render() {
       var filter = localStorage.getItem('filter')
-      console.log(filter)
+      var list = [];
+      if(this.props.orcs.length!==0) {
+        list = this.props.list
+        .filter(art => {
+          if (filter==='') return true;
+          else return (art.orcid["value"]===filter);
+        })
+        .sort((a,b) => {return b.dataModificacao-a.dataModificacao})
+      }
       return (
         <table className="w3-table-all">
         <thead>
@@ -18,20 +26,14 @@ class AppList extends Component {
         </thead>
         <tbody>
           {
-            this.props.list
-            .filter(art => {
-              if (filter==='') return true;
-              else return (art.orcid["value"]===filter);
-            })
-            .sort((a,b) => {return b.dataModificacao-a.dataModificacao})
-            .map(art => (
-              <tr className='tableHover'>
-                <td>{art.orcid["value"]}</td>
-                <td>{art.titulo}</td>
-                <td>{art.ano}</td>
-                <td>{art.scopus}</td>
-              </tr>
-            ))
+            list.map(art => (
+                <tr className='tableHover'>
+                  <td>{art.orcid["value"]}</td>
+                  <td>{art.titulo}</td>
+                  <td>{art.ano}</td>
+                  <td>{art.scopus}</td>
+                </tr>
+                ))
           }
         </tbody>
       </table>
