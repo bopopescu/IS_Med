@@ -13,10 +13,10 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('listOrc')!==null && localStorage.getItem('listOrc')!==undefined){
+    if (localStorage.getItem('listOrc') !== null && localStorage.getItem('listOrc') !== undefined) {
       this.setState({ listOrc: JSON.parse(localStorage.getItem('listOrc')) });
     }
-    localStorage.setItem("filter",'');
+    localStorage.setItem("filter", '');
   }
 
   newOrcid(orcidValue) {
@@ -40,17 +40,19 @@ class App extends Component {
   remOrcid(orcidValue) {
     var orcList = JSON.parse(localStorage.getItem('listOrc')).filter(orc => orc.value !== orcidValue)
     localStorage.setItem('listOrc', JSON.stringify(orcList));
-    this.setState({ listOrc: orcList });
+    this.setState({
+      listOrc: orcList
+    });
   }
 
   filterToPresent() {
   }
 
   async background() {
-    while (this.state.listOrc.length!==0) {
+    while (this.state.listOrc.length !== 0) {
       var x;
       var orcList = this.state.listOrc;
-      localStorage.setItem('provList',JSON.stringify([]));
+      localStorage.setItem('provList', JSON.stringify([]));
       for (x in orcList) {
         var request = require('request-promise');
         await request({
@@ -84,8 +86,8 @@ class App extends Component {
               //Caso nenhuma das referencias esteja ligada ao scopus apenas guarda o titulo
               var artTitle = art["work-summary"][0]["title"]["title"]["value"]
               var pubData = art["work-summary"][0]["publication-date"]
-              var year = (art["work-summary"][0]["publication-date"]!=null)?art["work-summary"][0]["publication-date"]["year"]["value"]:'';
-              list.push(newArt(artTitle,year,art["last-modified-date"]["value"],''));
+              var year = (art["work-summary"][0]["publication-date"] != null) ? art["work-summary"][0]["publication-date"]["year"]["value"] : '';
+              list.push(newArt(artTitle, year, art["last-modified-date"]["value"], ''));
             }
             else {
               //Caso hajam varias referencias com ligacao ao scopus analisa a que tem display-index menor
@@ -107,15 +109,15 @@ class App extends Component {
                   scopusID = eid["external-id-value"]
                 }
               }
-              list.push(newArt(artTitle,year,art["last-modified-date"]["value"], scopusID));
+              list.push(newArt(artTitle, year, art["last-modified-date"]["value"], scopusID));
             }
           }
 
           list = JSON.parse(localStorage.getItem('provList')).concat(list);
-          localStorage.setItem('provList',JSON.stringify(list));
+          localStorage.setItem('provList', JSON.stringify(list));
 
 
-          function newArt(title,year,lastModDate, scopusA) {
+          function newArt(title, year, lastModDate, scopusA) {
             const item = {
               orcid: orcList[x],
               titulo: title,
@@ -127,19 +129,40 @@ class App extends Component {
           }
         });
       }
+
+      function arrayUnique(array) {
+        var a = array.concat();
+        for(var i=0; i<a.length; ++i) {
+            for(var j=i+1; j<a.length; ++j) {
+                if(a[i].orcid["value"] === a[j].orcid["value"] && 
+                   a[i].titulo === a[j].titulo && 
+                   a[i].ano === a[j].ano && 
+                   a[i].dataModificacao === a[j].dataModificacao && 
+                   a[i].scopus === a[j].scopus){
+                    a.splice(j--, 1);}
+            }
+        }
+    
+        return a;
+    }
+
       const lista = JSON.parse(localStorage.getItem('provList'));
       localStorage.removeItem('provList');
-      this.setState({
-        listAll: lista
-      });
-      await new Promise(resolve => { setTimeout(() => { }, 100 * 1000); });
+      this.setState((previousState) => ({
+        listAll: arrayUnique(previousState.listAll.concat(lista)).filter(art => {
+          console.log()
+          return previousState.listOrc.filter(orc => art.orcid["value"]===orc.value).length!=0;
+        })
+      }));
+      await new Promise(() => { setTimeout(() => { }, 100 * 1000); });
     }
   }
 
   render() {
-    if (this.state.listOrc.length!==0){
+    if (this.state.listOrc.length !== 0) {
       this.background();
     }
+    console.log(this.state)
     return (
       <div className="App">
         <header className="App-header">
@@ -147,15 +170,15 @@ class App extends Component {
         </header>
         <div>
           <div className="mySidebarScopus col-xs-3">
-            <AppSidebar 
-                  list={this.state.listOrc}
-                  addOrcid={(orcid) => this.newOrcid(orcid)}
-                  remOrcid={(orcid) => this.remOrcid(orcid)} />
+            <AppSidebar
+              list={this.state.listOrc}
+              addOrcid={(orcid) => this.newOrcid(orcid)}
+              remOrcid={(orcid) => this.remOrcid(orcid)} />
           </div>
           <div className="listDiv col-xs-9 no-padding">
-            <AppList 
-                  list={this.state.listAll} 
-                  orcs={this.state.listOrc}/>
+            <AppList
+              list={this.state.listAll}
+              orcs={this.state.listOrc} />
           </div>
         </div>
       </div>
