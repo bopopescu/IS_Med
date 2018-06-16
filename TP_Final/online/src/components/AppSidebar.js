@@ -23,12 +23,12 @@ class AppSidebar extends Component {
                                 }} >Inserir</button>
                 </div>
                 <div className="row sidebarItem">
-                            <button className="w3-button col-xs-12" onClick={() => {localStorage.setItem('filter','')}}>TODOS</button>
+                            <button className="w3-button col-xs-12" onClick={() => {localStorage.setItem('filter','');this.props.render();}}>TODOS</button>
                     </div>
                 {this.props.list.map(orc =>
                     <div className="row sidebarItem">
                             <button className="col-xs-11 w3-padding-small w3-left-align w3-button"
-                                    onClick={() => {localStorage.setItem('filter',orc.value)}}>
+                                    onClick={() => {localStorage.setItem('filter',orc.value);this.props.render();}}>
                                     {orc.value}
                             </button>
                             <span className="col-xs-1 w3-padding-small w3-right" onClick={() => this.props.remOrcid(orc.value)}>✖</span>

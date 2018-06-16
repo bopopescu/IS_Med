@@ -17,6 +17,8 @@ class App extends Component {
       this.setState({ listOrc: JSON.parse(localStorage.getItem('listOrc')) });
     }
     localStorage.setItem("filter", '');
+    setInterval(() => {this.background()}, 10000);
+
   }
 
   newOrcid(orcidValue) {
@@ -36,6 +38,7 @@ class App extends Component {
     orcList = orcList.concat(orcid)
     localStorage.setItem('listOrc', JSON.stringify(orcList));
     this.setState({ listOrc: orcList });
+    this.background()
   }
   remOrcid(orcidValue) {
     var orcList = JSON.parse(localStorage.getItem('listOrc')).filter(orc => orc.value !== orcidValue)
@@ -43,13 +46,11 @@ class App extends Component {
     this.setState({
       listOrc: orcList
     });
+    this.background()
   }
 
-  filterToPresent() {
-  }
 
   async background() {
-    while (this.state.listOrc.length !== 0) {
       var x;
       var orcList = this.state.listOrc;
       localStorage.setItem('provList', JSON.stringify([]));
@@ -72,21 +73,22 @@ class App extends Component {
             var workFL = [];
             //Verifica se alguma das referencias de um artigo tem ligacao ao scopus se tiver adiciona a lista WorkFL
             var z;
+            var eid;
             for (z in art["work-summary"]) {
               var work = art["work-summary"][z];
               var y;
               for (y in work["external-ids"]["external-id"]) {
-                var eid = work["external-ids"]["external-id"][y];
+                eid = work["external-ids"]["external-id"][y];
                 if (eid["external-id-type"] === "eid") {
                   workFL.push([work])
                 }
               }
             }
+            var artTitle, year;
             if (workFL.length === 0) {
               //Caso nenhuma das referencias esteja ligada ao scopus apenas guarda o titulo
-              var artTitle = art["work-summary"][0]["title"]["title"]["value"]
-              var pubData = art["work-summary"][0]["publication-date"]
-              var year = (art["work-summary"][0]["publication-date"] != null) ? art["work-summary"][0]["publication-date"]["year"]["value"] : '';
+              artTitle = art["work-summary"][0]["title"]["title"]["value"]
+              year = (art["work-summary"][0]["publication-date"] != null) ? art["work-summary"][0]["publication-date"]["year"]["value"] : '';
               list.push(newArt(artTitle, year, art["last-modified-date"]["value"], ''));
             }
             else {
@@ -99,12 +101,12 @@ class App extends Component {
                   workF = work
                 }
               }
-              var artTitle = workF[0]["title"]["title"]["value"]
-              var year = workF[0]["publication-date"]["year"]["value"]
+              artTitle = workF[0]["title"]["title"]["value"]
+              year = workF[0]["publication-date"]["year"]["value"]
               var scopusID = ""
               var it;
               for (it in workF[0]["external-ids"]["external-id"]) {
-                var eid = workF[0]["external-ids"]["external-id"][it];
+                eid = workF[0]["external-ids"]["external-id"][it];
                 if (eid["external-id-type"] === "eid") {
                   scopusID = eid["external-id-value"]
                 }
@@ -150,19 +152,20 @@ class App extends Component {
       localStorage.removeItem('provList');
       this.setState((previousState) => ({
         listAll: arrayUnique(previousState.listAll.concat(lista)).filter(art => {
-          console.log()
-          return previousState.listOrc.filter(orc => art.orcid["value"]===orc.value).length!=0;
+          return previousState.listOrc.filter(orc => art.orcid["value"]===orc.value).length!==0;
         })
       }));
-      await new Promise(() => { setTimeout(() => { }, 100 * 1000); });
-    }
+  }
+
+  rerender() {
+    this.forceUpdate()
   }
 
   render() {
-    if (this.state.listOrc.length !== 0) {
+    if(this.state.listAll.length===0 && this.state.listOrc.length!==0){
       this.background();
     }
-    console.log(this.state)
+    console.log(this.state);
     return (
       <div className="App">
         <header className="App-header">
@@ -173,7 +176,8 @@ class App extends Component {
             <AppSidebar
               list={this.state.listOrc}
               addOrcid={(orcid) => this.newOrcid(orcid)}
-              remOrcid={(orcid) => this.remOrcid(orcid)} />
+              remOrcid={(orcid) => this.remOrcid(orcid)}
+              render={() => this.rerender()}/>
           </div>
           <div className="listDiv col-xs-9 no-padding">
             <AppList
