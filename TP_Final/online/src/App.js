@@ -13,7 +13,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('listOrc')!==null && localStorage.getItem('listOrc')!=undefined){
+    if (localStorage.getItem('listOrc')!==null && localStorage.getItem('listOrc')!==undefined){
       this.setState({ listOrc: JSON.parse(localStorage.getItem('listOrc')) });
     }
     localStorage.setItem("filter",'');
@@ -47,7 +47,7 @@ class App extends Component {
   }
 
   async background() {
-    while (true) {
+    while (this.state.listOrc.length!==0) {
       var x;
       var orcList = this.state.listOrc;
       localStorage.setItem('provList',JSON.stringify([]));
@@ -137,7 +137,9 @@ class App extends Component {
   }
 
   render() {
-    this.background();
+    if (this.state.listOrc.length!==0){
+      this.background();
+    }
     return (
       <div className="App">
         <header className="App-header">
@@ -151,7 +153,9 @@ class App extends Component {
                   remOrcid={(orcid) => this.remOrcid(orcid)} />
           </div>
           <div className="listDiv col-xs-9 no-padding">
-            <AppList list={this.state.listAll}/>
+            <AppList 
+                  list={this.state.listAll} 
+                  orcs={this.state.listOrc}/>
           </div>
         </div>
       </div>
