@@ -52,11 +52,6 @@ class App extends Component {
 
 
   async background() {
-<<<<<<< HEAD
-    while (this.state.listOrc.length !== 0) {
-      var t0 = performance.now();
-=======
->>>>>>> 909dc796b2a98279ebc254787c78f3f0f2a886d9
       var x;
       var orcList = this.state.listOrc;
       localStorage.setItem('provList', JSON.stringify([]));
@@ -93,13 +88,8 @@ class App extends Component {
             var artTitle, year;
             if (workFL.length === 0) {
               //Caso nenhuma das referencias esteja ligada ao scopus apenas guarda o titulo
-<<<<<<< HEAD
-              var artTitle = art["work-summary"][0]["title"]["title"]["value"]
-              var year = (art["work-summary"][0]["publication-date"] != null) ? art["work-summary"][0]["publication-date"]["year"]["value"] : '';
-=======
               artTitle = art["work-summary"][0]["title"]["title"]["value"]
               year = (art["work-summary"][0]["publication-date"] != null) ? art["work-summary"][0]["publication-date"]["year"]["value"] : '';
->>>>>>> 909dc796b2a98279ebc254787c78f3f0f2a886d9
               list.push(newArt(artTitle, year, art["last-modified-date"]["value"], ''));
             }
             else {
@@ -163,35 +153,23 @@ class App extends Component {
       localStorage.removeItem('provList');
       this.setState((previousState) => ({
         listAll: arrayUnique(previousState.listAll.concat(lista)).filter(art => {
-<<<<<<< HEAD
-          console.log()
           return previousState.listOrc.filter(orc => art.orcid["value"]===orc.value).length!==0;
         })
       }));
       var t1 = performance.now();
       this.setState({time: t1-t0 })
       console.log(this.state.time)
-      await new Promise(() => { setTimeout(() => { }, 100 * 1000); });
-    }
-=======
-          return previousState.listOrc.filter(orc => art.orcid["value"]===orc.value).length!==0;
-        })
-      }));
   }
 
   rerender() {
     this.forceUpdate()
->>>>>>> 909dc796b2a98279ebc254787c78f3f0f2a886d9
   }
 
   render() {
     if(this.state.listAll.length===0 && this.state.listOrc.length!==0){
       this.background();
     }
-<<<<<<< HEAD
-=======
     console.log(this.state);
->>>>>>> 909dc796b2a98279ebc254787c78f3f0f2a886d9
     return (
       <div className="App">
         <header className="App-header">
