@@ -1,6 +1,7 @@
 import mysql.connector
 import webbrowser
 import time
+import codecs
 
 def connectionDB():
     conn = mysql.connector.connect(
@@ -13,7 +14,7 @@ def connectionDB():
 
 
 
-def htmlTop():
+def htmlTop(index):
     start = time.time()
     index.write(""" <!DOCTYPE html>
                     <html lang="pt">
@@ -166,7 +167,7 @@ def renderSelectButton(has_artigos,index, cursor):
                             </div>""")
 
 
-def putTime(start):
+def putTime(start, index):
     end_time = time.time()-start
     index.write("""
                                     <div id="footer">
@@ -199,17 +200,31 @@ def getOrcidFromId(id, cursor):
 
     
 
+def getOrcidFromId(id, cursor):
+     sql = "SELECT orcid FROM isfinal.orcid WHERE idOrcid = %s" %id
+     cursor.execute(sql)
+     orcid = cursor.fetchone()
+     return orcid[0]
 
-start_time = htmlTop()
-conn, cursor = connectionDB()
-has_artigos = selectHasArtigos(conn, cursor)
-renderAllButton()
-renderSelectButton()
-createAllTables()
-putTime(start_time)
-end = time.time()-start_time
-print(end)
-cursor.close()
-index.close()
-webbrowser.open_new_tab('index.html')
+def main():
+    index = codecs.open("index.html", "w", "utf-8")
+    conn, cursor = connectionDB()
+    start_time = htmlTop(index)
+    renderAllButton(index)
+    has_artigos = selectHasArtigos(cursor)
+    renderSelectButton(has_artigos, index, cursor)
+    createAllTables(has_artigos, index, cursor)
+    putTime(start_time, index)
+    end = time.time() - start_time
+    print(end)
+    cursor.close()
+    index.close()
+    webbrowser.open_new_tab('index.html')
+ 
+ 
+
+if __name__ == "__main__":
+    main()
+
+
 
