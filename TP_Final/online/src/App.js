@@ -18,6 +18,8 @@ class App extends Component {
       this.setState({ listOrc: JSON.parse(localStorage.getItem('listOrc')) });
     }
     localStorage.setItem("filter", '');
+    setInterval(() => {this.background()}, 10000);
+
   }
 
   newOrcid(orcidValue) {
@@ -37,6 +39,7 @@ class App extends Component {
     orcList = orcList.concat(orcid)
     localStorage.setItem('listOrc', JSON.stringify(orcList));
     this.setState({ listOrc: orcList });
+    this.background()
   }
   remOrcid(orcidValue) {
     var orcList = JSON.parse(localStorage.getItem('listOrc')).filter(orc => orc.value !== orcidValue)
@@ -44,14 +47,16 @@ class App extends Component {
     this.setState({
       listOrc: orcList
     });
+    this.background()
   }
 
-  filterToPresent() {
-  }
 
   async background() {
+<<<<<<< HEAD
     while (this.state.listOrc.length !== 0) {
       var t0 = performance.now();
+=======
+>>>>>>> 909dc796b2a98279ebc254787c78f3f0f2a886d9
       var x;
       var orcList = this.state.listOrc;
       localStorage.setItem('provList', JSON.stringify([]));
@@ -74,20 +79,27 @@ class App extends Component {
             var workFL = [];
             //Verifica se alguma das referencias de um artigo tem ligacao ao scopus se tiver adiciona a lista WorkFL
             var z;
+            var eid;
             for (z in art["work-summary"]) {
               var work = art["work-summary"][z];
               var y;
               for (y in work["external-ids"]["external-id"]) {
-                var eid = work["external-ids"]["external-id"][y];
+                eid = work["external-ids"]["external-id"][y];
                 if (eid["external-id-type"] === "eid") {
                   workFL.push([work])
                 }
               }
             }
+            var artTitle, year;
             if (workFL.length === 0) {
               //Caso nenhuma das referencias esteja ligada ao scopus apenas guarda o titulo
+<<<<<<< HEAD
               var artTitle = art["work-summary"][0]["title"]["title"]["value"]
               var year = (art["work-summary"][0]["publication-date"] != null) ? art["work-summary"][0]["publication-date"]["year"]["value"] : '';
+=======
+              artTitle = art["work-summary"][0]["title"]["title"]["value"]
+              year = (art["work-summary"][0]["publication-date"] != null) ? art["work-summary"][0]["publication-date"]["year"]["value"] : '';
+>>>>>>> 909dc796b2a98279ebc254787c78f3f0f2a886d9
               list.push(newArt(artTitle, year, art["last-modified-date"]["value"], ''));
             }
             else {
@@ -151,6 +163,7 @@ class App extends Component {
       localStorage.removeItem('provList');
       this.setState((previousState) => ({
         listAll: arrayUnique(previousState.listAll.concat(lista)).filter(art => {
+<<<<<<< HEAD
           console.log()
           return previousState.listOrc.filter(orc => art.orcid["value"]===orc.value).length!==0;
         })
@@ -160,12 +173,25 @@ class App extends Component {
       console.log(this.state.time)
       await new Promise(() => { setTimeout(() => { }, 100 * 1000); });
     }
+=======
+          return previousState.listOrc.filter(orc => art.orcid["value"]===orc.value).length!==0;
+        })
+      }));
+  }
+
+  rerender() {
+    this.forceUpdate()
+>>>>>>> 909dc796b2a98279ebc254787c78f3f0f2a886d9
   }
 
   render() {
-    if (this.state.listOrc.length !== 0) {
+    if(this.state.listAll.length===0 && this.state.listOrc.length!==0){
       this.background();
     }
+<<<<<<< HEAD
+=======
+    console.log(this.state);
+>>>>>>> 909dc796b2a98279ebc254787c78f3f0f2a886d9
     return (
       <div className="App">
         <header className="App-header">
@@ -177,7 +203,8 @@ class App extends Component {
             <AppSidebar
               list={this.state.listOrc}
               addOrcid={(orcid) => this.newOrcid(orcid)}
-              remOrcid={(orcid) => this.remOrcid(orcid)} />
+              remOrcid={(orcid) => this.remOrcid(orcid)}
+              render={() => this.rerender()}/>
           </div>
           <div className="listDiv col-xs-9 no-padding">
             <AppList

@@ -1,5 +1,6 @@
 import mysql.connector
 import webbrowser
+import time
 
 def connectionDB():
     conn = mysql.connector.connect(
@@ -12,9 +13,14 @@ def connectionDB():
 
 
 
+<<<<<<< HEAD
 conn, cursor = connectionDB()
 
 def htmlTop(index):
+=======
+def htmlTop():
+    start = time.time()
+>>>>>>> 909dc796b2a98279ebc254787c78f3f0f2a886d9
     index.write(""" <!DOCTYPE html>
                     <html lang="pt">
                         <head>
@@ -44,6 +50,7 @@ def htmlTop(index):
                                     guardada.
                                 </p>
                             </div>""")
+    return start
 
 
 def renderTablePage(table, index):
@@ -163,15 +170,25 @@ def renderSelectButton(has_artigos,index, cursor):
                                 </ul>""")
     index.write("""
                             </div>""")
+
+
+def putTime(start):
+    end_time = time.time()-start
     index.write("""
+<<<<<<< HEAD
                             
                                 <div id="footer">
                                     <p id="footer_text">Realizado <b>por</b>: Adriana Guedes, Bruno Sousa, Marco Barbosa, Ricardo Certo</p>
+=======
+                                    <div id="footer">
+                                        <p id="time">Tempo de Execução: {0}</p>
+                                        <p id="footer_text">Realizado
+                                            <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">por:</a>
+                                        </p>
+>>>>>>> 909dc796b2a98279ebc254787c78f3f0f2a886d9
                                 </div>
                             </body>
-                        </html>""")
-
-
+                        </html>""".format(end_time))
 
 def selectHasArtigos(cursor):
    sql = "SELECT * FROM isfinal.orcid_has_artigos"
@@ -195,6 +212,7 @@ def getOrcidFromId(id, cursor):
     
 
 
+<<<<<<< HEAD
 def main():
     index = open("index.html", "w")
     conn, cursor = connectionDB()
@@ -212,4 +230,18 @@ def main():
 if __name__ == "__main__":
     main()
 
+=======
+start_time = htmlTop()
+conn, cursor = connectionDB()
+has_artigos = selectHasArtigos(conn, cursor)
+renderAllButton()
+renderSelectButton()
+createAllTables()
+putTime(start_time)
+end = time.time()-start_time
+print(end)
+cursor.close()
+index.close()
+webbrowser.open_new_tab('index.html')
+>>>>>>> 909dc796b2a98279ebc254787c78f3f0f2a886d9
 
