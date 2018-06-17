@@ -1,5 +1,6 @@
 import mysql.connector
 import webbrowser
+import time
 
 
 def connectionDB():
@@ -15,6 +16,7 @@ def connectionDB():
 index = open("index.html", "w")
 
 def htmlTop():
+    start = time.time()
     index.write(""" <!DOCTYPE html>
                     <html lang="en">
                         <head>
@@ -44,6 +46,7 @@ def htmlTop():
                                     guardada.
                                 </p>
                             </div>""")
+    return start
 
 
 def renderTablePage(table):
@@ -167,16 +170,19 @@ def renderSelectButton():
                                 </ul>""")
     index.write("""
                             </div>""")
+
+
+def putTime(start):
+    end_time = time.time()-start
     index.write("""
-                                <div id="footer">
-                                    <p id="footer_text">Realizado
-                                        <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">por:</a>
-                                    </p>
+                                    <div id="footer">
+                                        <p id="time">Tempo de Execução: {0}</p>
+                                        <p id="footer_text">Realizado
+                                            <a href="#" data-toggle="tooltip" data-placement="top" data-html="true" title="Bruno Sousa A74330<br>Adriana Guedes A74545<br>Marco Barbosa A75278<br>Ricardo Certo A75315 ">por:</a>
+                                        </p>
                                 </div>
                             </body>
-                        </html>""")
-
-
+                        </html>""".format(end_time))
 
 def selectHasArtigos(conn, cursor):
    sql = "SELECT * FROM isfinal.orcid_has_artigos"
@@ -199,12 +205,15 @@ def getOrcidFromId(id):
 
 
 
-htmlTop()
+start_time = htmlTop()
 conn, cursor = connectionDB()
 has_artigos = selectHasArtigos(conn, cursor)
 renderAllButton()
 renderSelectButton()
 createAllTables()
+putTime(start_time)
+end = time.time()-start_time
+print(end)
 cursor.close()
 index.close()
 webbrowser.open_new_tab('index.html')

@@ -45,6 +45,9 @@ html * {
   text-align: center;
 }
 
+#time{
+  color: #DDDDDD;
+  }
 #all_button_div{
   margin-top: 70px;
   text-align: center;
