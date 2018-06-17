@@ -8,7 +8,8 @@ class App extends Component {
     super(props);
     this.state = {
       listAll: [],
-      listOrc: []
+      listOrc: [],
+      time: ''
     }
   }
 
@@ -50,6 +51,7 @@ class App extends Component {
 
   async background() {
     while (this.state.listOrc.length !== 0) {
+      var t0 = performance.now();
       var x;
       var orcList = this.state.listOrc;
       localStorage.setItem('provList', JSON.stringify([]));
@@ -85,7 +87,6 @@ class App extends Component {
             if (workFL.length === 0) {
               //Caso nenhuma das referencias esteja ligada ao scopus apenas guarda o titulo
               var artTitle = art["work-summary"][0]["title"]["title"]["value"]
-              var pubData = art["work-summary"][0]["publication-date"]
               var year = (art["work-summary"][0]["publication-date"] != null) ? art["work-summary"][0]["publication-date"]["year"]["value"] : '';
               list.push(newArt(artTitle, year, art["last-modified-date"]["value"], ''));
             }
@@ -99,12 +100,12 @@ class App extends Component {
                   workF = work
                 }
               }
-              var artTitle = workF[0]["title"]["title"]["value"]
-              var year = workF[0]["publication-date"]["year"]["value"]
+              artTitle = workF[0]["title"]["title"]["value"]
+              year = workF[0]["publication-date"]["year"]["value"]
               var scopusID = ""
               var it;
               for (it in workF[0]["external-ids"]["external-id"]) {
-                var eid = workF[0]["external-ids"]["external-id"][it];
+                eid = workF[0]["external-ids"]["external-id"][it];
                 if (eid["external-id-type"] === "eid") {
                   scopusID = eid["external-id-value"]
                 }
@@ -151,9 +152,12 @@ class App extends Component {
       this.setState((previousState) => ({
         listAll: arrayUnique(previousState.listAll.concat(lista)).filter(art => {
           console.log()
-          return previousState.listOrc.filter(orc => art.orcid["value"]===orc.value).length!=0;
+          return previousState.listOrc.filter(orc => art.orcid["value"]===orc.value).length!==0;
         })
       }));
+      var t1 = performance.now();
+      this.setState({time: t1-t0 })
+      console.log(this.state.time)
       await new Promise(() => { setTimeout(() => { }, 100 * 1000); });
     }
   }
@@ -162,11 +166,11 @@ class App extends Component {
     if (this.state.listOrc.length !== 0) {
       this.background();
     }
-    console.log(this.state)
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">IS - Sistema ORCID</h1>
+          <p className="time"> Tempo: {this.state.time / 1000}</p>
         </header>
         <div>
           <div className="mySidebarScopus col-xs-3">
