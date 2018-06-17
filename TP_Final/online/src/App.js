@@ -55,6 +55,7 @@ class App extends Component {
       var x;
       var orcList = this.state.listOrc;
       localStorage.setItem('provList', JSON.stringify([]));
+      var t0 = performance.now();
       for (x in orcList) {
         var request = require('request-promise');
         await request({
@@ -157,7 +158,7 @@ class App extends Component {
         })
       }));
       var t1 = performance.now();
-      this.setState({time: t1-t0 })
+      this.setState({time: t1 - t0 })
       console.log(this.state.time)
   }
 
