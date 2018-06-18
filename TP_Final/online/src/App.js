@@ -8,7 +8,8 @@ class App extends Component {
     super(props);
     this.state = {
       listAll: [],
-      listOrc: []
+      listOrc: [],
+      time: ''
     }
   }
 
@@ -54,6 +55,7 @@ class App extends Component {
       var x;
       var orcList = this.state.listOrc;
       localStorage.setItem('provList', JSON.stringify([]));
+      var t0 = performance.now();
       for (x in orcList) {
         var request = require('request-promise');
         await request({
@@ -155,6 +157,9 @@ class App extends Component {
           return previousState.listOrc.filter(orc => art.orcid["value"]===orc.value).length!==0;
         })
       }));
+      var t1 = performance.now();
+      this.setState({time: t1 - t0 })
+      console.log(this.state.time)
   }
 
   rerender() {
@@ -170,6 +175,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">IS - Sistema ORCID</h1>
+          <p className="time"> Tempo: {this.state.time / 1000}</p>
         </header>
         <div>
           <div className="mySidebarScopus col-xs-3">
