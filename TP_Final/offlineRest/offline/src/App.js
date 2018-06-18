@@ -8,7 +8,8 @@ class App extends Component {
     super(props);
     this.state = {
       listAll: [],
-      listOrc: []
+      listOrc: [],
+      time: ''
     }
   }
 
@@ -19,6 +20,7 @@ class App extends Component {
   }
 
   fetchInfo() {
+    var t0 = performance.now();
     fetch('http://localhost:5000/IS/orcids')
       .then(res => res.json())
       .then(orcs => {
@@ -31,6 +33,8 @@ class App extends Component {
             })
           });
       });
+      var t1 = performance.now();
+      this.setState({time: (t1-t0)})
   }
 
   newOrcid(orcidValue) {
@@ -61,6 +65,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">IS - Sistema ORCID</h1>
+          <p id="time"> Time: {this.state.time}</p>
         </header>
         <div>
           <div className="mySidebarScopus col-xs-3">
