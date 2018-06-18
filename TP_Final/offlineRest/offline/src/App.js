@@ -13,12 +13,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('listOrc') !== null && localStorage.getItem('listOrc') !== undefined) {
-      this.setState({ listOrc: JSON.parse(localStorage.getItem('listOrc')) });
-    }
     localStorage.setItem("filter", '');
     this.fetchInfo();
-    setInterval(() => { this.fetchInfo() }, 10000);
+    setInterval(() => { this.fetchInfo() }, 5000);
   }
 
   fetchInfo() {

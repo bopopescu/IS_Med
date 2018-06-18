@@ -62,12 +62,12 @@ CREATE TABLE IF NOT EXISTS `ISfinal`.`Orcid_has_Artigos` (
   CONSTRAINT `fk_Orcid_has_Artigos_Orcid`
     FOREIGN KEY (`idOrcid`)
     REFERENCES `ISfinal`.`Orcid` (`idOrcid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Orcid_has_Artigos_Artigos1`
     FOREIGN KEY (`idArtigos`)
     REFERENCES `ISfinal`.`Artigos` (`idArtigos`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 

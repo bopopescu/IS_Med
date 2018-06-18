@@ -40,6 +40,7 @@ app.post('/IS/addOrcid', function (req, res) {
       sql = "Insert into ISfinal.Orcid(orcid) values (\"" + req.query.orcid + "\");";
       connection.query(sql, function (err, results) {
         if (err) throw err
+        background();
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers");
         res.send(JSON.stringify(results));
@@ -51,7 +52,6 @@ app.post('/IS/addOrcid', function (req, res) {
       res.send(JSON.stringify(results));
     }
   })
-  background();
 });
 
 app.post('/IS/delOrcid', function (req, res) {
@@ -66,7 +66,6 @@ app.post('/IS/delOrcid', function (req, res) {
       res.send(JSON.stringify(results));
     })
   })
-  background();
 });
 
 app.get('/IS/arts', function (req, res) {
