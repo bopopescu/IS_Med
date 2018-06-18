@@ -34,7 +34,7 @@ class App extends Component {
           });
       });
       var t1 = performance.now();
-      this.setState({time: (t1-t0)})
+      console.log(t1-t0);
   }
 
   newOrcid(orcidValue) {
