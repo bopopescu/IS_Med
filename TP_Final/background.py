@@ -129,7 +129,7 @@ def saveWithScopus(idArt,idorcid,lastModDate,work):
 #    r = requests.get('https://api.elsevier.com/content/abstract/citations?scopus_id=' + scopusID + '&apiKey=4bea4f758eda4188f6923c7a4c851380&httpAccept=application%2Fjson',headers=headers)
 #    reqJson = r.json()
 #    print reqJson
-    cursor.execute("Insert into ISfinal.Artigos (idArtigos, lastModifiedDate, titulo, ano) values ("+str(idArt)+","+str(lastModDate)+",\""+artTitle+"\","+year+");")
+    cursor.execute("Insert into ISfinal.Artigos (idArtigos, lastModifiedDate, titulo, ano, scopus) values ("+str(idArt)+","+str(lastModDate)+",\""+artTitle+"\","+year+",\'"+scopusID+"\');")
     cursor.execute("Insert into ISfinal.Orcid_has_Artigos (idArtigos, idOrcid) values ("+str(idArt)+","+str(idorcid)+");")
 
 
